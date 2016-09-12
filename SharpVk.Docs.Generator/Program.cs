@@ -14,28 +14,31 @@ namespace SharpVk.Docs.Generator
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Get Contents List");
-
             string listFilePath = ".\\FileUriList.txt";
 
-            //var gitHubClient = new GitHubClient(new ProductHeaderValue("SharpVk"));
+            if (!File.Exists(listFilePath) || File.GetLastWriteTimeUtc(listFilePath) + TimeSpan.FromDays(1) < DateTime.UtcNow)
+            {
+                Console.WriteLine("Get Contents List");
 
-            //var contents = gitHubClient.Repository.Content.GetAllContents("KhronosGroup", "Vulkan-Docs", "doc/specs/vulkan/chapters").Result;
+                var gitHubClient = new GitHubClient(new ProductHeaderValue("SharpVk"));
 
-            //var fileList = new List<Uri>();
+                var contents = gitHubClient.Repository.Content.GetAllContents("KhronosGroup", "Vulkan-Docs", "doc/specs/vulkan/chapters").Result;
 
-            //fileList.AddRange(contents.Where(x => x.Type == ContentType.File).Select(x => x.DownloadUrl));
+                var fileList = new List<Uri>();
 
-            //foreach (var subDir in contents.Where(x => x.Type == ContentType.Dir))
-            //{
-            //    Console.WriteLine($"Get Subdirectory {subDir.Path}");
+                fileList.AddRange(contents.Where(x => x.Type == ContentType.File).Select(x => x.DownloadUrl));
 
-            //    var subDirContents = gitHubClient.Repository.Content.GetAllContents("KhronosGroup", "Vulkan-Docs", subDir.Path).Result;
+                foreach (var subDir in contents.Where(x => x.Type == ContentType.Dir))
+                {
+                    Console.WriteLine($"Get Subdirectory {subDir.Path}");
 
-            //    fileList.AddRange(subDirContents.Where(x => x.Type == ContentType.File).Select(x => x.DownloadUrl));
-            //}
+                    var subDirContents = gitHubClient.Repository.Content.GetAllContents("KhronosGroup", "Vulkan-Docs", subDir.Path).Result;
 
-            //File.WriteAllLines(listFilePath, fileList.Select(x => x.ToString()));
+                    fileList.AddRange(subDirContents.Where(x => x.Type == ContentType.File).Select(x => x.DownloadUrl));
+                }
+
+                File.WriteAllLines(listFilePath, fileList.Select(x => x.ToString()));
+            }
 
             Console.WriteLine("Get File Contents");
 
@@ -218,16 +221,9 @@ namespace SharpVk.Docs.Generator
 
             var line = fileData[refIndex.FileName][refIndex.LineIndex];
 
-            int summaryIndex = line.IndexOf('-');
+            int nameLength = 12 + name.Length;
 
-            if (summaryIndex > 0)
-            {
-                summaryIndex += 2;
-            }
-            else
-            {
-                summaryIndex = line.IndexOf(' ', 12) + 1;
-            }
+            int summaryIndex = line.Skip(nameLength).TakeWhile(x => char.IsPunctuation(x) || char.IsWhiteSpace(x)).Count() + nameLength;
 
             summary = line.Substring(summaryIndex);
             summary = CapitaliseFirst(summary);
@@ -305,6 +301,8 @@ namespace SharpVk.Docs.Generator
 
             if (!File.Exists(tempFile) || File.GetLastWriteTimeUtc(tempFile) + TimeSpan.FromDays(1) < DateTime.UtcNow)
             {
+                Console.WriteLine($"Downloading {tempFile}");
+
                 string fileDirectory = Path.GetDirectoryName(tempFile);
 
                 if (!Directory.Exists(fileDirectory))

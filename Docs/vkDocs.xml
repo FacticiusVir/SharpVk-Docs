@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <docs>
   <types>
-    <type name="PFN_vkAllocationFunction" summary="Efined memory allocation function.">
+    <type name="PFN_vkAllocationFunction" summary="Application-defined memory allocation function.">
       <specification />
       <members>
         <member name="pUserData">pname:pUserData is the value specified for slink:VkAllocationCallbacks::pname:pUserData in the allocator specified by the application.</member>
@@ -10,14 +10,14 @@
         <member name="allocationScope">pname:allocationScope is a elink:VkSystemAllocationScope value specifying the scope of the lifetime of the allocation, as described &lt;&lt;memory-host-allocation-scope,here&gt;&gt;.</member>
       </members>
     </type>
-    <type name="PFN_vkFreeFunction" summary="Efined memory free function.">
+    <type name="PFN_vkFreeFunction" summary="Application-defined memory free function.">
       <specification />
       <members>
         <member name="pUserData">pname:pUserData is the value specified for slink:VkAllocationCallbacks::pname:pUserData in the allocator specified by the application.</member>
         <member name="pMemory">pname:pMemory is the allocation to be freed.</member>
       </members>
     </type>
-    <type name="PFN_vkInternalAllocationNotification" summary="Efined memory allocation notification function.">
+    <type name="PFN_vkInternalAllocationNotification" summary="Application-defined memory allocation notification function.">
       <specification />
       <members>
         <member name="pUserData">pname:pUserData is the value specified for slink:VkAllocationCallbacks::pname:pUserData in the allocator specified by the application.</member>
@@ -26,7 +26,7 @@
         <member name="allocationScope">pname:allocationScope is a elink:VkSystemAllocationScope value specifying the scope of the lifetime of the allocation, as described &lt;&lt;memory-host-allocation-scope,here&gt;&gt;.</member>
       </members>
     </type>
-    <type name="PFN_vkInternalFreeNotification" summary="Efined memory free notification function.">
+    <type name="PFN_vkInternalFreeNotification" summary="Application-defined memory free notification function.">
       <specification />
       <members>
         <member name="pUserData">pname:pUserData is the value specified for slink:VkAllocationCallbacks::pname:pUserData in the allocator specified by the application.</member>
@@ -35,7 +35,7 @@
         <member name="allocationScope">pname:allocationScope is a elink:VkSystemAllocationScope value specifying the scope of the lifetime of the allocation, as described &lt;&lt;memory-host-allocation-scope,here&gt;&gt;.</member>
       </members>
     </type>
-    <type name="PFN_vkReallocationFunction" summary="Efined memory reallocation function.">
+    <type name="PFN_vkReallocationFunction" summary="Application-defined memory reallocation function.">
       <specification />
       <members>
         <member name="pUserData">pname:pUserData is the value specified for slink:VkAllocationCallbacks::pname:pUserData in the allocator specified by the application.</member>
@@ -837,7 +837,7 @@
         <member name="width">pname:width, pname:height and pname:layers define the dimensions of the framebuffer.</member>
       </members>
     </type>
-    <type name="VkFrontFace" summary="Acing orientation.">
+    <type name="VkFrontFace" summary="Interpret polygon front-facing orientation.">
       <specification>
         <para>The first step of polygon rasterization is to determine whether the triangle is _back-facing_ or _front-facing_. This determination is made based on the sign of the (clipped or unclipped) polygon's area computed in framebuffer coordinates. One way to compute this area is:</para>
         <para>[latexmath] ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ \[   a = -{1 \over 2}\sum_{i=0}^{n-1}         x_f^i y_f^{i \oplus 1} -         x_f^{i \oplus 1} y_f^i \] ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++</para>
@@ -1151,7 +1151,7 @@
       </specification>
       <members />
     </type>
-    <type name="VkPhysicalDeviceFeatures" summary="Rained features that can be supported by an implementation.">
+    <type name="VkPhysicalDeviceFeatures" summary="Structure describing the fine-grained features that can be supported by an implementation.">
       <specification />
       <members />
     </type>
@@ -2039,7 +2039,7 @@
     <command name="vkCmdBlitImage" summary="Copy regions of an image, potentially performing format conversion,." />
     <command name="vkCmdClearAttachments" summary="Clear regions within currently bound framebuffer attachments." />
     <command name="vkCmdClearColorImage" summary="Clear regions of a color image." />
-    <command name="vkCmdClearDepthStencilImage" summary="Tencil image." />
+    <command name="vkCmdClearDepthStencilImage" summary="Fill regions of a combined depth-stencil image." />
     <command name="vkCmdCopyBuffer" summary="Copy data between buffer regions." />
     <command name="vkCmdCopyBufferToImage" summary="Copy data from a buffer into an image." />
     <command name="vkCmdCopyImage" summary="Copy data between images." />
@@ -2060,7 +2060,7 @@
     <command name="vkCmdNextSubpass" summary="Transition to the next subpass of a render pass." />
     <command name="vkCmdPipelineBarrier" summary="Insert a set of execution and memory barriers." />
     <command name="vkCmdPushConstants" summary="Update the values of push constants." />
-    <command name="vkCmdResetEvent" summary="Ignaled state." />
+    <command name="vkCmdResetEvent" summary="Reset an event object to non-signaled state." />
     <command name="vkCmdResetQueryPool" summary="Reset queries in a query pool." />
     <command name="vkCmdResolveImage" summary="Resolve regions of an image." />
     <command name="vkCmdSetBlendConstants" summary="Set the values of blend constants." />
@@ -2187,7 +2187,7 @@
     <command name="vkResetCommandBuffer" summary="Reset a command buffer." />
     <command name="vkResetCommandPool" summary="Reset a command pool." />
     <command name="vkResetDescriptorPool" summary="Resets a descriptor pool object." />
-    <command name="vkResetEvent" summary="Ignaled state." />
+    <command name="vkResetEvent" summary="Reset an event to non-signaled state." />
     <command name="vkResetFences" summary="Resets one or more fence objects." />
     <command name="vkSetEvent" summary="Set an event to signaled state." />
     <command name="vkUnmapMemory" summary="Unmap a previously mapped memory object." />
