@@ -133,16 +133,19 @@ namespace SharpVk.Docs.Generator
 
                     var apiIncludeIndex = paragraphs.TakeWhile(x => !IsInclude(x, "api")).Count();
 
-                    var specification = paragraphs.Take(apiIncludeIndex - 1).Select(x => string.Join(" ", x));
+                    var specification = paragraphs.Take(apiIncludeIndex - 1);
 
                     var memberDocElements = new List<XElement>();
 
                     var validityIncludeIndex = paragraphs.TakeWhile(x => !IsInclude(x, "validity")).Count();
-                    var memberParagraphs = paragraphs.Skip(apiIncludeIndex + 1).Take((validityIncludeIndex - apiIncludeIndex) - 1);
+                    var descriptionParagraphs = paragraphs.Skip(apiIncludeIndex + 1).Take((validityIncludeIndex - apiIncludeIndex) - 1);
 
-                    if (memberParagraphs.Any() && memberParagraphs.First().First().StartsWith("  *"))
+                    IEnumerable<string> memberList;
+                    int memberParagraphCount;
+
+                    if (descriptionParagraphs.Any() && TryGetMemberList(descriptionParagraphs, out memberList, out memberParagraphCount))
                     {
-                        var memberItems = SplitList(memberParagraphs.First()).ToDictionary(item =>
+                        var memberItems = memberList.ToDictionary(item =>
                         {
                             var terms = item.Split(' ');
 
@@ -156,6 +159,8 @@ namespace SharpVk.Docs.Generator
 
                             return new string(memberName.TakeWhile(character => char.IsLetterOrDigit(character) || character == '_' || character == '.').ToArray());
                         }, x => x);
+
+                        descriptionParagraphs = descriptionParagraphs.Skip(memberParagraphCount);
 
                         var commentMappings = enumComments.ContainsKey(typeName) ? enumComments[typeName] : null;
 
@@ -176,7 +181,15 @@ namespace SharpVk.Docs.Generator
                         }
                     }
 
-                    typeDocElements.Add(new XElement("type", new XAttribute("name", typeName), new XAttribute("summary", summary), new XElement("specification", specification.Select(x => new XElement("para", x)).ToArray()), new XElement("members", memberDocElements.ToArray())));
+                    var specificationParaElements = specification.Select(x => new XElement("para", string.Join(" ", x.Select(y => y.Trim())))).ToArray();
+                    var descriptionParaElements = descriptionParagraphs.Select(x => new XElement("para", string.Join(" ", x.Select(y => y.Trim())))).ToArray();
+
+                    typeDocElements.Add(new XElement("type",
+                                            new XAttribute("name", typeName),
+                                            new XAttribute("summary", summary),
+                                            new XElement("specification", specificationParaElements),
+                                            new XElement("description", descriptionParaElements),
+                                            new XElement("members", memberDocElements.ToArray())));
                 }
             }
 
@@ -213,6 +226,34 @@ namespace SharpVk.Docs.Generator
 
             Console.WriteLine("Done");
             Console.ReadLine();
+        }
+
+        private static bool TryGetMemberList(IEnumerable<IEnumerable<string>> descriptionParagraphs, out IEnumerable<string> memberList, out int memberParagraphCount)
+        {
+            memberList = null;
+
+            memberParagraphCount = 0;
+
+            string initialLine = descriptionParagraphs.First().First();
+
+            if (initialLine.StartsWith("  *"))
+            {
+                memberList = SplitList(descriptionParagraphs.First());
+
+                memberParagraphCount = 1;
+
+                return true;
+            }
+            else if (initialLine.Trim().StartsWith("ename") && initialLine.Trim().EndsWith("::"))
+            {
+                memberList = descriptionParagraphs.TakeWhile(x => x.First().StartsWith("ename")).Select(x => string.Join(" ", x));
+
+                memberParagraphCount = memberList.Count();
+
+                return true;
+            }
+
+            return false;
         }
 
         private static void GetLines(Dictionary<string, RefIndex> refLookup, Dictionary<string, string[]> fileData, string name, out string summary, out IEnumerable<string> lines)
