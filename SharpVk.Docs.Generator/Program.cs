@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 
@@ -71,6 +72,15 @@ namespace SharpVk.Docs.Generator
 
                 var lines = File.ReadAllLines(fileName);
 
+                for (int lineIndex = 0; lineIndex < lines.Length; lineIndex++)
+                {
+                    var line = lines[lineIndex];
+
+                    line = Regex.Replace(line, @"\[\[[a-zA-Z0-9\-]*\]\]", "");
+
+                    lines[lineIndex] = line;
+                }
+
                 fileData.Add(fileName, lines);
 
                 for (int lineIndex = 0; lineIndex < lines.Length; lineIndex++)
@@ -129,7 +139,7 @@ namespace SharpVk.Docs.Generator
 
                     GetLines(refLookup, fileData, typeName, out summary, out lines);
 
-                    var paragraphs = lines.Split(string.Empty, true).ToArray();
+                    var paragraphs = GetParagraphs(lines).ToArray();
 
                     var apiIncludeIndex = paragraphs.TakeWhile(x => !IsInclude(x, "api")).Count();
 
@@ -138,6 +148,12 @@ namespace SharpVk.Docs.Generator
                     var memberDocElements = new List<XElement>();
 
                     var validityIncludeIndex = paragraphs.TakeWhile(x => !IsInclude(x, "validity")).Count();
+
+                    if (!paragraphs.Any(x => IsInclude(x, "validity")))
+                    {
+                        validityIncludeIndex = paragraphs.Count() + 1;
+                    }
+
                     var descriptionParagraphs = paragraphs.Skip(apiIncludeIndex + 1).Take((validityIncludeIndex - apiIncludeIndex) - 1);
 
                     IEnumerable<string> memberList;
@@ -228,6 +244,50 @@ namespace SharpVk.Docs.Generator
             Console.ReadLine();
         }
 
+        private static IEnumerable<IEnumerable<string>> GetParagraphs(IEnumerable<string> lines)
+        {
+            var segment = new List<string>();
+
+            string previousValue = null;
+            bool isInSubsection = false;
+
+            foreach (var value in lines)
+            {
+                if (!isInSubsection && value == "--" && previousValue == "+")
+                {
+                    isInSubsection = true;
+
+                    segment.Add(value);
+                }
+                else if (isInSubsection && value == "--")
+                {
+                    isInSubsection = false;
+
+                    segment.Add(value);
+                }
+                else if (!isInSubsection && string.IsNullOrEmpty(value))
+                {
+                    if (segment.Any())
+                    {
+                        yield return segment.ToArray();
+
+                        segment.Clear();
+                    }
+                }
+                else
+                {
+                    segment.Add(value);
+                }
+
+                previousValue = value;
+            }
+
+            if (segment.Any())
+            {
+                yield return segment.ToArray();
+            }
+        }
+
         private static bool TryGetMemberList(IEnumerable<IEnumerable<string>> descriptionParagraphs, out IEnumerable<string> memberList, out int memberParagraphCount)
         {
             memberList = null;
@@ -246,14 +306,31 @@ namespace SharpVk.Docs.Generator
             }
             else if (initialLine.Trim().StartsWith("ename") && initialLine.Trim().EndsWith("::"))
             {
-                memberList = descriptionParagraphs.TakeWhile(x => x.First().StartsWith("ename")).Select(x => string.Join(" ", x));
+                memberList = descriptionParagraphs.TakeWhile(x => x.First().Trim().StartsWith("ename")).Select(x => string.Join(" ", x.Select(y => y.Trim())));
 
                 memberParagraphCount = memberList.Count();
 
                 return true;
             }
+            else if (descriptionParagraphs.Any(IsMemberList))
+            {
+                memberList = SplitList(descriptionParagraphs.First(IsMemberList));
+
+                memberParagraphCount = descriptionParagraphs.TakeWhile(x => !IsMemberList(x)).Count() + 1;
+
+                return true;
+            }
 
             return false;
+        }
+
+        private static bool IsMemberList(IEnumerable<string> x)
+        {
+            var initialLine = x.FirstOrDefault();
+
+            return initialLine != null
+                && (initialLine.StartsWith("  * ename:")
+                    || initialLine.StartsWith("  * pname:"));
         }
 
         private static void GetLines(Dictionary<string, RefIndex> refLookup, Dictionary<string, string[]> fileData, string name, out string summary, out IEnumerable<string> lines)

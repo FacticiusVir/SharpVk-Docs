@@ -5,6 +5,11 @@ VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpVk.Docs.Generator", "SharpVk.Docs.Generator\SharpVk.Docs.Generator.csproj", "{89D00B2F-5684-4959-AC1F-1DDB27EF7316}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{82225C16-E22F-4454-A5C6-15F104225A90}"
+	ProjectSection(SolutionItems) = preProject
+		Docs\vkDocs.xml = Docs\vkDocs.xml
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
