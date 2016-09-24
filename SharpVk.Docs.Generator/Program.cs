@@ -432,6 +432,11 @@ namespace SharpVk.Docs.Generator
                 {
                     if (fileResponse.IsSuccessStatusCode)
                     {
+                        if (File.Exists(tempFile))
+                        {
+                            File.Delete(tempFile);
+                        }
+
                         using (var tempFileStream = File.OpenWrite(tempFile))
                         {
                             await fileResponse.Content.CopyToAsync(tempFileStream);

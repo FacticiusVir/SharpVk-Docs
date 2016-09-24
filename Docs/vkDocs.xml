@@ -17,6 +17,24 @@
         <member name="allocationScope">pname:allocationScope is a elink:VkSystemAllocationScope value specifying the scope of the lifetime of the allocation, as described &lt;&lt;memory-host-allocation-scope,here&gt;&gt;.</member>
       </members>
     </type>
+    <type name="PFN_vkDebugReportCallbackEXT" summary="Application-defined debug report callback function.">
+      <specification />
+      <description>
+        <para>The callback returns a basetype:VkBool32 that indicates to the calling layer if the Vulkan call should: be aborted or not. Applications should: always return ename:VK_FALSE so that they see the same behavior with and without validation layers enabled.</para>
+        <para>If the application returns ename:VK_TRUE from its callback and the Vulkan call being aborted returns a elink:VkResult, the layer will return ename:VK_ERROR_VALIDATION_FAILED_EXT.</para>
+        <para>[NOTE] .Note ==== The primary expected use of ename:VK_ERROR_VALIDATION_FAILED_EXT is for validation layer testing. It is not expected that an application would see this error code during normal use of the validation layers. ====</para>
+      </description>
+      <members>
+        <member name="flags">pname:flags indicates the ename:VkDebugReportFlagBitsEXT that triggered this callback.</member>
+        <member name="objType">pname:objType is a elink:VkDebugReportObjectTypeEXT specifying the type of object being used or created at the time the event was triggered.</member>
+        <member name="object">pname:object gives the object where the issue was detected. pname:object may be ename:VK_NULL_OBJECT if there is no object associated with the event.</member>
+        <member name="location">pname:location is a component (layer, driver, loader) defined value that indicates the _location_ of the trigger. This is an optional value.</member>
+        <member name="messageCode">pname:messageCode is a layer-defined value indicating what test triggered this callback.</member>
+        <member name="pLayerPrefix">pname:pLayerPrefix is the abbreviation of the component making the callback.</member>
+        <member name="pMessage">pname:pMessage is a null-terminated string detailing the trigger conditions.</member>
+        <member name="pUserData">pname:pUserData is the user data given when the DebugReportCallback was created.</member>
+      </members>
+    </type>
     <type name="PFN_vkFreeFunction" summary="Application-defined memory free function.">
       <specification />
       <description>
@@ -119,7 +137,7 @@
         <member name="sType">pname:sType is the type of this structure and must: be ename:VK_STRUCTURE_TYPE_ANDROID_SURFACE_CREATE_INFO_KHR.</member>
         <member name="pNext">pname:pNext is `NULL` or a pointer to an extension-specific structure.</member>
         <member name="flags">pname:flags is reserved for future use.</member>
-        <member name="window">pname:window is a pointer to the ANativeWindow to associate the surface with.</member>
+        <member name="window">pname:window is a pointer to the code:ANativeWindow to associate the surface with.</member>
       </members>
     </type>
     <type name="VkApplicationInfo" summary="Structure specifying application info.">
@@ -217,7 +235,11 @@
     </type>
     <type name="VkBool32" summary="Vulkan boolean type.">
       <specification />
-      <description />
+      <description>
+        <para>ename:VK_TRUE represents a boolean *True* (integer 1) value, and ename:VK_FALSE a boolean *False* (integer 0) value.</para>
+        <para>All values returned from a Vulkan implementation in a basetype:VkBool32 will be either ename:VK_TRUE or ename:VK_FALSE.</para>
+        <para>Applications must: not pass any other values than ename:VK_TRUE or ename:VK_FALSE into a Vulkan implementation where a basetype:VkBool32 is expected.</para>
+      </description>
       <members />
     </type>
     <type name="VkBorderColor" summary="Specify border color used for texture lookups.">
@@ -353,7 +375,7 @@
       </description>
       <members>
         <member name="aspectMask">pname:aspectMask is a mask selecting the color, depth and/or stencil aspects of the attachment to be cleared. pname:aspectMask can: include ename:VK_IMAGE_ASPECT_COLOR_BIT for color attachments, ename:VK_IMAGE_ASPECT_DEPTH_BIT for depth/stencil attachments with a depth component, and ename:VK_IMAGE_ASPECT_STENCIL_BIT for depth/stencil attachments with a stencil component. If the subpass's depth/stencil attachment is ename:VK_ATTACHMENT_UNUSED, then the clear has no effect.</member>
-        <member name="colorAttachment">pname:colorAttachment is only meaningful if ename:VK_IMAGE_ASPECT_COLOR_BIT is set in pname:aspectMask, in which case it is an index to the pname:pColorAttachments array in the slink:VkSubpassDescription structure of the current subpass which selects the color attachment to clear. If pname:colorAttachment is ename:VK_ATTACHMENT_UNUSED or is greater than or equal to sname:VkSubpassDescription::pname:colorAttachmentCount, then the clear has no effect.</member>
+        <member name="colorAttachment">pname:colorAttachment is only meaningful if ename:VK_IMAGE_ASPECT_COLOR_BIT is set in pname:aspectMask, in which case it is an index to the pname:pColorAttachments array in the slink:VkSubpassDescription structure of the current subpass which selects the color attachment to clear. If pname:colorAttachment is ename:VK_ATTACHMENT_UNUSED then the clear has no effect.</member>
         <member name="clearValue">pname:clearValue is the color or depth/stencil value to clear the attachment to, as described in &lt;&lt;clears-values,Clear Values&gt;&gt; below.</member>
       </members>
     </type>
@@ -408,8 +430,8 @@
     <type name="VkColorSpaceKHR" summary="Supported color space of the presentation engine.">
       <specification />
       <description>
-        <para>[NOTE] .Note ==== If pname:pSurfaceFormats includes just one entry, whose value for pname:format is ename:VK_FORMAT_UNDEFINED, pname:surface has no preferred format.  In this case, the application can use any valid ename:VkFormat value. ====</para>
-        <para>[NOTE] .Note ==== In the initial release of the VK_KHR_surface and VK_KHR_swapchain extensions, the token ename:VK_COLORSPACE_SRGB_NONLINEAR_KHR was used. Starting in the May 13, 2016 updates to the extension branches, matching release 1.0.13 of the core API specification, ename:VK_COLOR_SPACE_SRGB_NONLINEAR_KHR is used instead for consistency with Vulkan naming rules. The older enum is still available for backwards compatibility. ====</para>
+        <para>[NOTE] .Note ==== If pname:pSurfaceFormats includes just one entry, whose value for pname:format is ename:VK_FORMAT_UNDEFINED, pname:surface has no preferred format. In this case, the application can: use any valid ename:VkFormat value. ====</para>
+        <para>[NOTE] .Note ==== In the initial release of the +VK_KHR_surface+ and +VK_KHR_swapchain+ extensions, the token ename:VK_COLORSPACE_SRGB_NONLINEAR_KHR was used. Starting in the May 13, 2016 updates to the extension branches, matching release 1.0.13 of the core API specification, ename:VK_COLOR_SPACE_SRGB_NONLINEAR_KHR is used instead for consistency with Vulkan naming rules. The older enum is still available for backwards compatibility. ====</para>
       </description>
       <members>
         <member name="VK_COLOR_SPACE_SRGB_NONLINEAR_KHR">ename:VK_COLOR_SPACE_SRGB_NONLINEAR_KHR: The presentation engine supports the sRGB color space.</member>
@@ -542,7 +564,7 @@
       <specification />
       <description />
       <members>
-        <member name="VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR">ename:VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR: The alpha channel, if it exists, of the images is ignored in the compositing process.  Instead, the image is treated as if it has a constant alpha of 1.0.</member>
+        <member name="VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR">ename:VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR: The alpha channel, if it exists, of the images is ignored in the compositing process. Instead, the image is treated as if it has a constant alpha of 1.0.</member>
         <member name="VK_COMPOSITE_ALPHA_PRE_MULTIPLIED_BIT_KHR">ename:VK_COMPOSITE_ALPHA_PRE_MULTIPLIED_BIT_KHR: The alpha channel, if it exists, of the images is respected in the compositing process. The non-alpha channels of the image are expected to already be multiplied by the alpha channel by the application.</member>
         <member name="VK_COMPOSITE_ALPHA_POST_MULTIPLIED_BIT_KHR">ename:VK_COMPOSITE_ALPHA_POST_MULTIPLIED_BIT_KHR: The alpha channel, if it exists, of the images is respected in the compositing process. The non-alpha channels of the image are not expected to already be multiplied by the alpha channel by the application; instead, the compositor will multiply the non-alpha channels of the image by the alpha channel during compositing.</member>
         <member name="VK_COMPOSITE_ALPHA_INHERIT_BIT_KHR">ename:VK_COMPOSITE_ALPHA_INHERIT_BIT_KHR: The way in which the presentation engine treats the alpha channel in the images is unknown to the Vulkan API. Instead, the application is responsible for setting the composite alpha blending mode using native window system commands. If the application does not set the blending mode using native window system commands, then a platform-specific default will be used.</member>
@@ -581,6 +603,113 @@
         <para>If the pname:cullMode is set to ename:VK_CULL_MODE_NONE no triangles are discarded, if it is set to ename:VK_CULL_MODE_FRONT_BIT front-facing triangles are discarded, if it is set to ename:VK_CULL_MODE_BACK_BIT then back-facing triangles are discarded and if it is set to ename:VK_CULL_MODE_FRONT_AND_BACK then all triangles are discarded. Following culling, fragments are produced for any triangles which have not been discarded.</para>
       </description>
       <members />
+    </type>
+    <type name="VkDebugMarkerMarkerInfoEXT" summary="Specify parameters of a command buffer marker region.">
+      <specification />
+      <description />
+      <members>
+        <member name="sType">pname:sType is the type of this structure and must: be ename:VK_STRUCTURE_TYPE_DEBUG_MARKER_MARKER_INFO_EXT.</member>
+        <member name="pNext">pname:pNext is `NULL` or a pointer to an extension-specific structure.</member>
+        <member name="pMarkerName">pname:pMarkerName is a pointer to a null-terminated UTF-8 string that contains the name of the marker.</member>
+        <member name="color">pname:color is an optional RGBA color value that can be associated with the marker. A particular implementation may: choose to ignore this color value. The values contain RGBA values in order, in the range 0.0 to 1.0. If all elements in pname:color are set to 0.0 then it is ignored.</member>
+      </members>
+    </type>
+    <type name="VkDebugMarkerObjectNameInfoEXT" summary="Specify parameters of a name to give to an object.">
+      <specification />
+      <description>
+        <para>Applications may: change the name associated with an object simply by calling fname:vkDebugMarkerSetObjectNameEXT again with a new string. To remove a previously set name, pname:pName should: be set to an empty string.</para>
+      </description>
+      <members>
+        <member name="sType">pname:sType is the type of this structure and must: be ename:VK_STRUCTURE_TYPE_DEBUG_MARKER_OBJECT_NAME_INFO_EXT.</member>
+        <member name="pNext">pname:pNext is `NULL` or a pointer to an extension-specific structure.</member>
+        <member name="objectType">pname:objectType is a elink:VkDebugReportObjectTypeEXT specifying the type of the object to be named.</member>
+        <member name="object">pname:object is the object to be named.</member>
+        <member name="pObjectName">pname:pObjectName is a null-terminated UTF-8 string specifying the name to apply to pname:object.</member>
+      </members>
+    </type>
+    <type name="VkDebugMarkerObjectTagInfoEXT" summary="Specify parameters of a tag to attach to an object.">
+      <specification />
+      <description>
+        <para>The pname:tagName parameter gives a name or identifier to the type of data being tagged. This can be used by debugging layers to easily filter for only data that can be used by that implementation.</para>
+      </description>
+      <members>
+        <member name="sType">pname:sType is the type of this structure and must: be ename:VK_STRUCTURE_TYPE_DEBUG_MARKER_OBJECT_TAG_INFO_EXT.</member>
+        <member name="pNext">pname:pNext is `NULL` or a pointer to an extension-specific structure.</member>
+        <member name="objectType">pname:objectType is a elink:VkDebugReportObjectTypeEXT specifying the type of the object to be named.</member>
+        <member name="object">pname:object is the object to be tagged.</member>
+        <member name="tagName">pname:tagName is a numerical identifier of the tag.</member>
+        <member name="tagSize">pname:tagSize is the number of bytes of data to attach to the object.</member>
+        <member name="pTag">pname:pTag is an array of pname:tagSize bytes containing the data to be associated with the object.</member>
+      </members>
+    </type>
+    <type name="VkDebugReportCallbackCreateInfoEXT" summary="Structure specifying parameters of a newly created debug report callback.">
+      <specification />
+      <description />
+      <members>
+        <member name="sType">pname:sType is the type of this structure.</member>
+        <member name="pNext">pname:pNext is `NULL` or a pointer to an extension-specific structure.</member>
+        <member name="flags">pname:flags indicate which event(s) will cause this callback to be called. Flags are interpreted as bitmasks and multiple may be set. Bits which can: be set include: + --</member>
+      </members>
+    </type>
+    <type name="VkDebugReportErrorEXT" summary="Unknown VK_EXT_debug_report enumeration type.">
+      <specification />
+      <description>
+        <para>[NOTE] .Note ==== The +VK_EXT_debug_report+ extension defines the elink:VkDebugReportErrorEXT enumerant type, but does not currently explain what the enumeration is used for. It is included here for completeness. ====</para>
+      </description>
+      <members />
+    </type>
+    <type name="VkDebugReportFlagBitsEXT" summary="Bitmask specifying events which cause a debug report callback.">
+      <specification />
+      <description>
+        <para>* pname:pfnCallback is the application callback function to call. * pname:pUserData is user data to be passed to the callback. --</para>
+        <para>For each sname:VkDebugReportCallbackEXT that is created the flags determine when that function is called. A callback will be made for issues that match any bit set in its flags. The callback will come directly from the component that detected the event, unless some other layer intercepts the calls for its own purposes (filter them in different way, log to system error log, etc.) An application may receive multiple callbacks if multiple sname:VkDebugReportCallbackEXT objects were created. A callback will always be executed in the same thread as the originating Vulkan call. A callback may be called from multiple threads simultaneously (if the application is making Vulkan calls from multiple threads).</para>
+      </description>
+      <members>
+        <member name="VK_DEBUG_REPORT_ERROR_BIT_EXT">ename:VK_DEBUG_REPORT_ERROR_BIT_EXT indicates an error that may cause undefined results, including an application crash.</member>
+        <member name="VK_DEBUG_REPORT_WARNING_BIT_EXT">ename:VK_DEBUG_REPORT_WARNING_BIT_EXT indicates an unexpected use. E.g. Not destroying objects prior to destroying the containing object or potential inconsistencies between descriptor set layout and the layout in the corresponding shader, etc.</member>
+        <member name="VK_DEBUG_REPORT_PERFORMANCE_WARNING_BIT_EXT">ename:VK_DEBUG_REPORT_PERFORMANCE_WARNING_BIT_EXT indicates a potentially non-optimal use of Vulkan. E.g. using flink:vkCmdClearColorImage when a RenderPass load_op would have worked.</member>
+        <member name="VK_DEBUG_REPORT_INFORMATION_BIT_EXT">ename:VK_DEBUG_REPORT_INFORMATION_BIT_EXT indicates an informational message such as resource details that may be handy when debugging an application.</member>
+        <member name="VK_DEBUG_REPORT_DEBUG_BIT_EXT">ename:VK_DEBUG_REPORT_DEBUG_BIT_EXT indicates diagnostic information from the loader and layers.</member>
+      </members>
+    </type>
+    <type name="VkDebugReportObjectTypeEXT" summary="Specify the type of an object handle.">
+      <specification />
+      <description>
+        <para>=== Command Buffer Markers</para>
+        <para>Typical Vulkan applications will submit many command buffers in each frame, with each command buffer containing a large number of individual commands. Being able to logically annotate regions of command buffers that belong together as well as hierarchically subdivide the frame is important to a developer's ability to navigate the commands viewed holistically.</para>
+        <para>The marker commands fname:vkCmdDebugMarkerBeginEXT and fname:vkCmdDebugMarkerEndEXT define regions of a series of commands that are grouped together, and they can be nested to create a hierarchy. The fname:vkCmdDebugMarkerInsertEXT command allows insertion of a single label within a command buffer.</para>
+      </description>
+      <members>
+        <member name="VK_DEBUG_REPORT_OBJECT_TYPE_UNKNOWN_EXT">ename:VK_DEBUG_REPORT_OBJECT_TYPE_UNKNOWN_EXT is an unknown object.</member>
+        <member name="VK_DEBUG_REPORT_OBJECT_TYPE_INSTANCE_EXT">ename:VK_DEBUG_REPORT_OBJECT_TYPE_INSTANCE_EXT is a sname:VkInstance.</member>
+        <member name="VK_DEBUG_REPORT_OBJECT_TYPE_PHYSICAL_DEVICE_EXT">ename:VK_DEBUG_REPORT_OBJECT_TYPE_PHYSICAL_DEVICE_EXT is a sname:VkPhysicalDevice.</member>
+        <member name="VK_DEBUG_REPORT_OBJECT_TYPE_DEVICE_EXT">ename:VK_DEBUG_REPORT_OBJECT_TYPE_DEVICE_EXT is a sname:VkDevice.</member>
+        <member name="VK_DEBUG_REPORT_OBJECT_TYPE_QUEUE_EXT">ename:VK_DEBUG_REPORT_OBJECT_TYPE_QUEUE_EXT is a sname:VkQueue.</member>
+        <member name="VK_DEBUG_REPORT_OBJECT_TYPE_SEMAPHORE_EXT">ename:VK_DEBUG_REPORT_OBJECT_TYPE_SEMAPHORE_EXT is a sname:VkSemaphore.</member>
+        <member name="VK_DEBUG_REPORT_OBJECT_TYPE_COMMAND_BUFFER_EXT">ename:VK_DEBUG_REPORT_OBJECT_TYPE_COMMAND_BUFFER_EXT is a sname:VkCommandBuffer.</member>
+        <member name="VK_DEBUG_REPORT_OBJECT_TYPE_FENCE_EXT">ename:VK_DEBUG_REPORT_OBJECT_TYPE_FENCE_EXT is a sname:VkFence.</member>
+        <member name="VK_DEBUG_REPORT_OBJECT_TYPE_DEVICE_MEMORY_EXT">ename:VK_DEBUG_REPORT_OBJECT_TYPE_DEVICE_MEMORY_EXT is a sname:VkDeviceMemory.</member>
+        <member name="VK_DEBUG_REPORT_OBJECT_TYPE_BUFFER_EXT">ename:VK_DEBUG_REPORT_OBJECT_TYPE_BUFFER_EXT is a sname:VkBuffer.</member>
+        <member name="VK_DEBUG_REPORT_OBJECT_TYPE_IMAGE_EXT">ename:VK_DEBUG_REPORT_OBJECT_TYPE_IMAGE_EXT is a sname:VkImage.</member>
+        <member name="VK_DEBUG_REPORT_OBJECT_TYPE_EVENT_EXT">ename:VK_DEBUG_REPORT_OBJECT_TYPE_EVENT_EXT is a sname:VkEvent.</member>
+        <member name="VK_DEBUG_REPORT_OBJECT_TYPE_QUERY_POOL_EXT">ename:VK_DEBUG_REPORT_OBJECT_TYPE_QUERY_POOL_EXT is a sname:VkQueryPool.</member>
+        <member name="VK_DEBUG_REPORT_OBJECT_TYPE_BUFFER_VIEW_EXT">ename:VK_DEBUG_REPORT_OBJECT_TYPE_BUFFER_VIEW_EXT is a sname:VkBufferView.</member>
+        <member name="VK_DEBUG_REPORT_OBJECT_TYPE_IMAGE_VIEW_EXT">ename:VK_DEBUG_REPORT_OBJECT_TYPE_IMAGE_VIEW_EXT is a sname:VkImageView.</member>
+        <member name="VK_DEBUG_REPORT_OBJECT_TYPE_SHADER_MODULE_EXT">ename:VK_DEBUG_REPORT_OBJECT_TYPE_SHADER_MODULE_EXT is a sname:VkShaderModule.</member>
+        <member name="VK_DEBUG_REPORT_OBJECT_TYPE_PIPELINE_CACHE_EXT">ename:VK_DEBUG_REPORT_OBJECT_TYPE_PIPELINE_CACHE_EXT is a sname:VkPipelineCache.</member>
+        <member name="VK_DEBUG_REPORT_OBJECT_TYPE_PIPELINE_LAYOUT_EXT">ename:VK_DEBUG_REPORT_OBJECT_TYPE_PIPELINE_LAYOUT_EXT is a sname:VkPipelineLayout.</member>
+        <member name="VK_DEBUG_REPORT_OBJECT_TYPE_RENDER_PASS_EXT">ename:VK_DEBUG_REPORT_OBJECT_TYPE_RENDER_PASS_EXT is a sname:VkRenderPass.</member>
+        <member name="VK_DEBUG_REPORT_OBJECT_TYPE_PIPELINE_EXT">ename:VK_DEBUG_REPORT_OBJECT_TYPE_PIPELINE_EXT is a sname:VkPipeline.</member>
+        <member name="VK_DEBUG_REPORT_OBJECT_TYPE_DESCRIPTOR_SET_LAYOUT_EXT">ename:VK_DEBUG_REPORT_OBJECT_TYPE_DESCRIPTOR_SET_LAYOUT_EXT is a sname:VkDescriptorSetLayout.</member>
+        <member name="VK_DEBUG_REPORT_OBJECT_TYPE_SAMPLER_EXT">ename:VK_DEBUG_REPORT_OBJECT_TYPE_SAMPLER_EXT is a sname:VkSampler.</member>
+        <member name="VK_DEBUG_REPORT_OBJECT_TYPE_DESCRIPTOR_POOL_EXT">ename:VK_DEBUG_REPORT_OBJECT_TYPE_DESCRIPTOR_POOL_EXT is a sname:VkDescriptorPool.</member>
+        <member name="VK_DEBUG_REPORT_OBJECT_TYPE_DESCRIPTOR_SET_EXT">ename:VK_DEBUG_REPORT_OBJECT_TYPE_DESCRIPTOR_SET_EXT is a sname:VkDescriptorSet.</member>
+        <member name="VK_DEBUG_REPORT_OBJECT_TYPE_FRAMEBUFFER_EXT">ename:VK_DEBUG_REPORT_OBJECT_TYPE_FRAMEBUFFER_EXT is a sname:VkFramebuffer.</member>
+        <member name="VK_DEBUG_REPORT_OBJECT_TYPE_COMMAND_POOL_EXT">ename:VK_DEBUG_REPORT_OBJECT_TYPE_COMMAND_POOL_EXT is a sname:VkCommandPool.</member>
+        <member name="VK_DEBUG_REPORT_OBJECT_TYPE_SURFACE_KHR_EXT">ename:VK_DEBUG_REPORT_OBJECT_TYPE_SURFACE_KHR_EXT is a sname:VkSurfaceKHR.</member>
+        <member name="VK_DEBUG_REPORT_OBJECT_TYPE_SWAPCHAIN_KHR_EXT">ename:VK_DEBUG_REPORT_OBJECT_TYPE_SWAPCHAIN_KHR_EXT is a sname:VkSwapchainKHR.</member>
+        <member name="VK_DEBUG_REPORT_OBJECT_TYPE_DEBUG_REPORT_EXT">ename:VK_DEBUG_REPORT_OBJECT_TYPE_DEBUG_REPORT_EXT is a sname:VkDebugReportCallbackEXT.</member>
+      </members>
     </type>
     <type name="VkDedicatedAllocationBufferCreateInfoNV" summary="Specify that a buffer is bound to a dedicated memory resource.">
       <specification>
@@ -814,14 +943,14 @@
       </description>
       <members>
         <member name="visibleRegion">pname:visibleRegion is the 2D extents of the visible region.</member>
-        <member name="refreshRate">pname:refreshRate is a basetype:uint32_t that is the number of times the display is refreshed each second multiplied by 1000.</member>
+        <member name="refreshRate">pname:refreshRate is a code:uint32_t that is the number of times the display is refreshed each second multiplied by 1000.</member>
       </members>
     </type>
     <type name="VkDisplayModePropertiesKHR" summary="Structure describing display mode properties.">
       <specification />
       <description />
       <members>
-        <member name="displayMode">pname:displayMode is a handle to the display mode described in this structure.  This handle will be valid for the lifetime of the Vulkan instance.</member>
+        <member name="displayMode">pname:displayMode is a handle to the display mode described in this structure. This handle will be valid for the lifetime of the Vulkan instance.</member>
         <member name="parameters">pname:parameters is a sname:VkDisplayModeParametersKHR structure describing the display parameters associated with pname:displayMode.</member>
       </members>
     </type>
@@ -890,7 +1019,7 @@
     <type name="VkDisplaySurfaceCreateInfoKHR" summary="Structure specifying parameters of a newly created display plane surface object.">
       <specification />
       <description>
-        <para>[NOTE] .Note ==== Creating a display surface must: not modify the state of the displays, planes, or other resources it names.  For example, it must: not apply the specified mode to be set on the associated display.  Application of display configuration occurs as a side effect of presenting to a display surface. ====</para>
+        <para>[NOTE] .Note ==== Creating a display surface must: not modify the state of the displays, planes, or other resources it names. For example, it must: not apply the specified mode to be set on the associated display. Application of display configuration occurs as a side effect of presenting to a display surface. ====</para>
       </description>
       <members>
         <member name="sType">pname:sType is the type of this structure and must: be ename:VK_STRUCTURE_TYPE_DISPLAY_SURFACE_CREATE_INFO_KHR.</member>
@@ -900,7 +1029,7 @@
         <member name="planeIndex">pname:planeIndex is the plane on which this surface appears.</member>
         <member name="planeStackIndex">pname:planeStackIndex is the z-order of the plane.</member>
         <member name="transform">pname:transform is the transform to apply to the images as part of the scanout operation.</member>
-        <member name="globalAlpha">pname:globalAlpha is the global alpha value.  This value is ignored if pname:alphaMode is not ename:VK_DISPLAY_PLANE_ALPHA_GLOBAL_BIT_KHR.</member>
+        <member name="globalAlpha">pname:globalAlpha is the global alpha value. This value is ignored if pname:alphaMode is not ename:VK_DISPLAY_PLANE_ALPHA_GLOBAL_BIT_KHR.</member>
         <member name="alphaMode">pname:alphaMode is the type of alpha blending to use.</member>
         <member name="imageSize">pname:imageSize The size of the presentable images to use with the surface.</member>
       </members>
@@ -964,15 +1093,15 @@
         <para>When slink:VkExportMemoryAllocateInfoNV::pname:handleTypes includes ename:VK_EXTERNAL_MEMORY_HANDLE_TYPE_OPAQUE_WIN32_BIT_NV, add a sname:VkExportMemoryWin32HandleInfoNV to the pname:pNext chain of the slink:VkExportMemoryAllocateInfoNV structure to specify security attributes and access rights for the memory object's external handle.</para>
       </specification>
       <description>
-        <para>If this structure is not present, or if pname:pAttributes is set to `NULL`, default security descriptor values will be used, and child processes created by the application will not inherit the handle, as described in the MSDN documentation for "Synchronization Object Security and Access Rights"[1].  Further, if the structure is not present, the access rights will be</para>
-        <para>etext:DXGI_SHARED_RESOURCE_READ | etext:DXGI_SHARED_RESOURCE_WRITE</para>
+        <para>If this structure is not present, or if pname:pAttributes is set to `NULL`, default security descriptor values will be used, and child processes created by the application will not inherit the handle, as described in the MSDN documentation for ``Synchronization Object Security and Access Rights''[1]. Further, if the structure is not present, the access rights will be</para>
+        <para>code:DXGI_SHARED_RESOURCE_READ | code:DXGI_SHARED_RESOURCE_WRITE</para>
         <para>[1] https://msdn.microsoft.com/en-us/library/windows/desktop/ms686670.aspx</para>
       </description>
       <members>
         <member name="sType">pname:sType is the type of this structure.</member>
         <member name="pNext">pname:pNext is `NULL` or a pointer to an extension-specific structure.</member>
-        <member name="pAttributes">pname:pAttributes is a pointer to a Windows sname:SECURITY_ATTRIBUTES structure specifying security attributes of the handle.</member>
-        <member name="dwAccess">pname:dwAccess is a basetype:DWORD specifying access rights of the handle.</member>
+        <member name="pAttributes">pname:pAttributes is a pointer to a Windows code:SECURITY_ATTRIBUTES structure specifying security attributes of the handle.</member>
+        <member name="dwAccess">pname:dwAccess is a code:DWORD specifying access rights of the handle.</member>
       </members>
     </type>
     <type name="VkExtensionProperties" summary="Structure specifying a extension properties.">
@@ -1562,7 +1691,7 @@
       <specification />
       <description>
         <para>If pname:image was created with the ename:VK_IMAGE_CREATE_MUTABLE_FORMAT_BIT flag, pname:format can: be different from the image's format, but if they are not equal they must: be _compatible_. Image format compatibility is defined in the &lt;&lt;features-formats-compatibility-classes,Format Compatibility Classes&gt;&gt; section.</para>
-        <para>.Image and image view parameter compatibility requirements [cols="20%h,35%,45%",options="header"] |==== | Dim, Arrayed, MS | Image parameters | View parameters | 1D, 0, 0 | imageType = ename:VK_IMAGE_TYPE_1D + width &gt;= 1 + height = 1 + depth = 1 + arrayLayers &gt;= 1 + samples = 1 | viewType = ename:VK_VIEW_TYPE_1D + baseArrayLayer &gt;= 0 + layerCount = 1 | 1D, 1, 0 | imageType = ename:VK_IMAGE_TYPE_1D + width &gt;= 1 + height = 1 + depth = 1 + arrayLayers &gt;= 1 + samples = 1 | viewType = ename:VK_VIEW_TYPE_1D_ARRAY + baseArrayLayer &gt;= 0 + layerCount &gt;= 1 | 2D, 0, 0 | imageType = ename:VK_IMAGE_TYPE_2D + width &gt;= 1 + height &gt;= 1 + depth = 1 + arrayLayers &gt;= 1 + samples = 1 | viewType = ename:VK_VIEW_TYPE_2D + baseArrayLayer &gt;= 0 + layerCount = 1 | 2D, 1, 0 | imageType = ename:VK_IMAGE_TYPE_2D + width &gt;= 1 + height &gt;= 1 + depth = 1 + arrayLayers &gt;= 1 + samples = 1 | viewType = ename:VK_VIEW_TYPE_2D_ARRAY + baseArrayLayer &gt;= 0 + layerCount &gt;= 1 | 2D, 0, 1 | imageType = ename:VK_IMAGE_TYPE_2D + width &gt;= 1 + height &gt;= 1 + depth = 1 + arrayLayers &gt;= 1 + samples &gt; 1 | viewType = ename:VK_VIEW_TYPE_2D + baseArrayLayer &gt;= 0 + layerCount = 1 | 2D, 1, 1 | imageType = ename:VK_IMAGE_TYPE_2D + width &gt;= 1 + height &gt;= 1 + depth = 1 + arrayLayers &gt;= 1 + samples &gt; 1 | viewType = ename:VK_VIEW_TYPE_2D_ARRAY + baseArrayLayer &gt;= 0 + layerCount &gt;= 1 | CUBE, 0, 0 | imageType = ename:VK_IMAGE_TYPE_2D + width &gt;= 1 + height = width + depth = 1 + arrayLayers &gt;= 6 + samples = 1 + flags include ename:VK_IMAGE_CREATE_CUBE_COMPATIBLE_BIT | viewType = ename:VK_VIEW_TYPE_CUBE + baseArrayLayer &gt;= 0 + layerCount = 6 | CUBE, 1, 0 | imageType = ename:VK_IMAGE_TYPE_2D + width &gt;= 1 + height = width + depth = 1 + N &gt;= 1 + arrayLayers &gt;= latexmath:[$6 \times N$] + samples = 1 + flags include ename:VK_IMAGE_CREATE_CUBE_COMPATIBLE_BIT | viewType = ename:VK_VIEW_TYPE_CUBE_ARRAY + baseArrayLayer &gt;= 0 + N &gt;= 1 + layerCount = latexmath:[$6 \times N$] | 3D, 0, 0 | imageType = ename:VK_IMAGE_TYPE_3D + width &gt;= 1 + height &gt;= 1 + depth &gt;= 1 + arrayLayers = 1 + samples = 1 | viewType = ename:VK_VIEW_TYPE_3D + baseArrayLayer = 0 + layerCount = 1 |====</para>
+        <para>.Image and image view parameter compatibility requirements [cols="15%h,35%,50%",options="header"] |==== | Dim, Arrayed, MS | Image parameters | View parameters | | pname:imageType = ci.pname:imageType + pname:width = ci.pname:extent.width + pname:height = ci.pname:extent.height + pname:depth = ci.pname:extent.depth + pname:arrayLayers = ci.pname:arrayLayers + pname:samples = ci.pname:samples + where ci is the slink:VkImageCreateInfo used to create pname:image. | pname:baseArrayLayer and pname:layerCount are members of the pname:subresourceRange member. | 1D, 0, 0 | pname:imageType = ename:VK_IMAGE_TYPE_1D + pname:width {geq} 1 + pname:height = 1 + pname:depth = 1 + pname:arrayLayers {geq} 1 + pname:samples = 1 | pname:viewType = ename:VK_VIEW_TYPE_1D + pname:baseArrayLayer {geq} 0 + pname:layerCount = 1 | 1D, 1, 0 | pname:imageType = ename:VK_IMAGE_TYPE_1D + pname:width {geq} 1 + pname:height = 1 + pname:depth = 1 + pname:arrayLayers {geq} 1 + pname:samples = 1 | pname:viewType = ename:VK_VIEW_TYPE_1D_ARRAY + pname:baseArrayLayer {geq} 0 + pname:layerCount {geq} 1 | 2D, 0, 0 | pname:imageType = ename:VK_IMAGE_TYPE_2D + pname:width {geq} 1 + pname:height {geq} 1 + pname:depth = 1 + pname:arrayLayers {geq} 1 + pname:samples = 1 | pname:viewType = ename:VK_VIEW_TYPE_2D + pname:baseArrayLayer {geq} 0 + pname:layerCount = 1 | 2D, 1, 0 | pname:imageType = ename:VK_IMAGE_TYPE_2D + pname:width {geq} 1 + pname:height {geq} 1 + pname:depth = 1 + pname:arrayLayers {geq} 1 + pname:samples = 1 | pname:viewType = ename:VK_VIEW_TYPE_2D_ARRAY + pname:baseArrayLayer {geq} 0 + pname:layerCount {geq} 1 | 2D, 0, 1 | pname:imageType = ename:VK_IMAGE_TYPE_2D + pname:width {geq} 1 + pname:height {geq} 1 + pname:depth = 1 + pname:arrayLayers {geq} 1 + pname:samples &gt; 1 | pname:viewType = ename:VK_VIEW_TYPE_2D + pname:baseArrayLayer {geq} 0 + pname:layerCount = 1 | 2D, 1, 1 | pname:imageType = ename:VK_IMAGE_TYPE_2D + pname:width {geq} 1 + pname:height {geq} 1 + pname:depth = 1 + pname:arrayLayers {geq} 1 + pname:samples &gt; 1 | pname:viewType = ename:VK_VIEW_TYPE_2D_ARRAY + pname:baseArrayLayer {geq} 0 + pname:layerCount {geq} 1 | CUBE, 0, 0 | pname:imageType = ename:VK_IMAGE_TYPE_2D + pname:width {geq} 1 + pname:height = pname:width + pname:depth = 1 + pname:arrayLayers {geq} 6 + pname:samples = 1 + pname:flags includes ename:VK_IMAGE_CREATE_CUBE_COMPATIBLE_BIT | pname:viewType = ename:VK_VIEW_TYPE_CUBE + pname:baseArrayLayer {geq} 0 + pname:layerCount = 6 | CUBE, 1, 0 | pname:imageType = ename:VK_IMAGE_TYPE_2D + pname:width {geq} 1 + pname:height = width + pname:depth = 1 + _N_ {geq} 1 + pname:arrayLayers {geq} 6 {times} _N_ + pname:samples = 1 + pname:flags includes ename:VK_IMAGE_CREATE_CUBE_COMPATIBLE_BIT | pname:viewType = ename:VK_VIEW_TYPE_CUBE_ARRAY + pname:baseArrayLayer {geq} 0 + pname:layerCount = 6 {times} _N_, _N_ {geq} 1 | 3D, 0, 0 | pname:imageType = ename:VK_IMAGE_TYPE_3D + pname:width {geq} 1 + pname:height {geq} 1 + pname:depth {geq} 1 + pname:arrayLayers = 1 + pname:samples = 1 | pname:viewType = ename:VK_VIEW_TYPE_3D + pname:baseArrayLayer = 0 + pname:layerCount = 1 |====</para>
       </description>
       <members>
         <member name="sType">pname:sType is the type of this structure.</member>
@@ -1723,7 +1852,7 @@
         <member name="sType">pname:sType is the type of this structure and must: be ename:VK_STRUCTURE_TYPE_MIR_SURFACE_CREATE_INFO_KHR.</member>
         <member name="pNext">pname:pNext is `NULL` or a pointer to an extension-specific structure.</member>
         <member name="flags">pname:flags is reserved for future use.</member>
-        <member name="connection">pname:connection and pname:surface are pointers to the MirConnection and MirSurface for the window to associate the surface with.</member>
+        <member name="connection">pname:connection and pname:surface are pointers to the code:MirConnection and code:MirSurface for the window to associate the surface with.</member>
       </members>
     </type>
     <type name="VkOffset2D" summary="Structure specifying a two-dimensional offset.">
@@ -1753,10 +1882,7 @@
     </type>
     <type name="VkPhysicalDeviceLimits" summary="Structure reporting implementation-dependent physical device limits.">
       <specification />
-      <description>
-        <para>// End of list</para>
-        <para>1:: For all bitmasks of type elink:VkSampleCountFlags above, possible values include: + --</para>
-      </description>
+      <description />
       <members>
         <member name="maxImageDimension1D">pname:maxImageDimension1D is the maximum dimension (pname:width) of an image created with an pname:imageType of ename:VK_IMAGE_TYPE_1D.</member>
         <member name="maxImageDimension2D">pname:maxImageDimension2D is the maximum dimension (pname:width or pname:height) of an image created with an pname:imageType of ename:VK_IMAGE_TYPE_2D and without ename:VK_IMAGE_CREATE_CUBE_COMPATIBLE_BIT set in pname:flags.</member>
@@ -1788,7 +1914,7 @@
         <member name="maxDescriptorSetStorageImages"> pname:maxDescriptorSetStorageImages is the maximum number of storage images that can: be included in descriptor bindings in a pipeline layout across all pipeline shader stages and descriptor set numbers. Descriptors with a type of ename:VK_DESCRIPTOR_TYPE_STORAGE_IMAGE, or ename:VK_DESCRIPTOR_TYPE_STORAGE_TEXEL_BUFFER count against this limit. See &lt;&lt;descriptorsets-storageimage&gt;&gt;, and &lt;&lt;descriptorsets-storagetexelbuffer&gt;&gt;.</member>
         <member name="maxDescriptorSetInputAttachments"> pname:maxDescriptorSetInputAttachments is the maximum number of input attachments that can: be included in descriptor bindings in a pipeline layout across all pipeline shader stages and descriptor set numbers. Descriptors with a type of ename:VK_DESCRIPTOR_TYPE_INPUT_ATTACHMENT count against this limit. See &lt;&lt;descriptorsets-inputattachment&gt;&gt;.</member>
         <member name="maxVertexInputAttributes"> pname:maxVertexInputAttributes is the maximum number of vertex input attributes that can: be specified for a graphics pipeline. These are described in the array of sname:VkVertexInputAttributeDescription structures that are provided at graphics pipeline creation time via the pname:pVertexAttributeDescriptions member of the sname:VkPipelineVertexInputStateCreateInfo structure. See &lt;&lt;fxvertex-attrib&gt;&gt; and &lt;&lt;fxvertex-input&gt;&gt;.</member>
-        <member name="maxVertexInputBindings"> pname:maxVertexInputBindings is the maximum number of vertex buffers that can: be specified for providing vertex attributes to a graphics pipeline. These are described in the array of sname:VkVertexInputBindingDescription structures that are provided at graphics pipeline creation time via the pname:pVertexBindingDescriptions member of the sname:VkPipelineVertexInputStateCreateInfo structure. The pname:binding member of sname:VkVertexInputBindingDescription must: be less than this limit. See &lt;&lt;fxvertex-input&gt;&gt;.</member>
+        <member name="maxVertexInputBindings">pname:maxVertexInputBindings is the maximum number of vertex buffers that can: be specified for providing vertex attributes to a graphics pipeline. These are described in the array of sname:VkVertexInputBindingDescription structures that are provided at graphics pipeline creation time via the pname:pVertexBindingDescriptions member of the sname:VkPipelineVertexInputStateCreateInfo structure. The pname:binding member of sname:VkVertexInputBindingDescription must: be less than this limit. See &lt;&lt;fxvertex-input&gt;&gt;.</member>
         <member name="maxVertexInputAttributeOffset"> pname:maxVertexInputAttributeOffset is the maximum vertex input attribute offset that can: be added to the vertex input binding stride. The pname:offset member of the sname:VkVertexInputAttributeDescription structure must: be less than or equal to this limit. See &lt;&lt;fxvertex-input&gt;&gt;.</member>
         <member name="maxVertexInputBindingStride"> pname:maxVertexInputBindingStride is the maximum vertex input binding stride that can: be specified in a vertex input binding. The pname:stride member of the sname:VkVertexInputBindingDescription structure must: be less than or equal to this limit. See &lt;&lt;fxvertex-input&gt;&gt;.</member>
         <member name="maxVertexOutputComponents"> pname:maxVertexOutputComponents is the maximum number of components of output variables which can: be output by a vertex shader. See &lt;&lt;shaders-vertex&gt;&gt;.</member>
@@ -1822,12 +1948,12 @@
         <member name="maxSamplerAnisotropy">pname:maxSamplerAnisotropy is the maximum degree of sampler anisotropy. The maximum degree of anisotropic filtering used for an image sampling operation is the minimum of the pname:maxAnisotropy member of the sname:VkSamplerCreateInfo structure and this limit. See &lt;&lt;samplers-maxAnisotropy&gt;&gt;.</member>
         <member name="maxViewports">pname:maxViewports is the maximum number of active viewports. The pname:viewportCount member of the sname:VkPipelineViewportStateCreateInfo structure that is provided at pipeline creation must: be less than or equal to this limit.</member>
         <member name="maxViewportDimensions">pname:maxViewportDimensions[2] are the maximum viewport dimensions in the X (width) and Y (height) dimensions, respectively. The maximum viewport dimensions must: be greater than or equal to the largest image which can: be created and used as a framebuffer attachment. See &lt;&lt;vertexpostproc-viewport,Controlling the Viewport&gt;&gt;.</member>
-        <member name="viewportBoundsRange">pname:viewportBoundsRange[2] is the latexmath:[$[\mathit{minimum},\mathit{maximum}\]$] range that the corners of a viewport must: be contained in. This range must: be at least + --  latexmath:[$[-2 \times \mathit{maxViewportDimensions}, 2 \times \mathit{maxViewportDimensions} - 1\]$].  See &lt;&lt;vertexpostproc-viewport,Controlling the Viewport&gt;&gt;.  // latexmath:[$[-2 \times size, 2 \times size - 1\]$] // // where latexmath:[$size$] is the value of pname:maxViewPortDimensions for X // and Y, respectively. See &lt;&lt;vertexpostproc-viewport,Controlling the // Viewport&gt;&gt;.  [NOTE] .Note ==== The intent of the pname:viewportBoundsRange limit is to allow a maximum sized viewport to be arbitrarily shifted relative to the output target as long as at least some portion intersects. This would give a bounds limit of latexmath:[$[- \mathit{maxViewportDimensions}+1, 2 \times \mathit{maxViewportDimensions} -1\]$], which would allow all possible non-empty-set intersections of the output target and the viewport. Since these numbers are typically powers of two, picking the signed number range using the smallest possible number of bits ends up with the specified range. ==== --</member>
+        <member name="viewportBoundsRange">pname:viewportBoundsRange[2] is the latexmath:[$[\mathit{minimum},\mathit{maximum}\]$] range that the corners of a viewport must: be contained in. This range must: be at least + -- latexmath:[$[-2 \times \mathit{size}, 2 \times \mathit{size} - 1\]$], where latexmath:[$\mathit{size} = \max(\mathit{maxViewportDimensions}[0\], \mathit{maxViewportDimensions}[1\]) $]. See &lt;&lt;vertexpostproc-viewport,Controlling the Viewport&gt;&gt;.  [NOTE] .Note ==== The intent of the pname:viewportBoundsRange limit is to allow a maximum sized viewport to be arbitrarily shifted relative to the output target as long as at least some portion intersects. This would give a bounds limit of latexmath:[$[-\mathit{size}+1, 2 \times \mathit{size} - 1\]$] which would allow all possible non-empty-set intersections of the output target and the viewport. Since these numbers are typically powers of two, picking the signed number range using the smallest possible number of bits ends up with the specified range. ==== --</member>
         <member name="viewportSubPixelBits">pname:viewportSubPixelBits is the number of bits of subpixel precision for viewport bounds. The subpixel precision that floating-point viewport bounds are interpreted at is given by this limit.</member>
-        <member name="minMemoryMapAlignment">pname:minMemoryMapAlignment is the minimum required alignment, in bytes, of host visible memory allocations within the host address space. When mapping a memory allocation with flink:vkMapMemory, subtracting pname:offset bytes from the returned pointer will always produce an integer multiple of this limit. See &lt;&lt;memory-device-hostaccess&gt;&gt;.</member>
-        <member name="minTexelBufferOffsetAlignment"> pname:minTexelBufferOffsetAlignment is the minimum required alignment, in bytes, for the pname:offset member of the sname:VkBufferViewCreateInfo structure for texel buffers. When a buffer view is created for a buffer which was created with ename:VK_BUFFER_USAGE_UNIFORM_TEXEL_BUFFER_BIT or ename:VK_BUFFER_USAGE_STORAGE_TEXEL_BUFFER_BIT set in the pname:usage member of the sname:VkBufferCreateInfo structure, the pname:offset must: be an integer multiple of this limit.</member>
-        <member name="minUniformBufferOffsetAlignment"> pname:minUniformBufferOffsetAlignment is the minimum required alignment, in bytes, for the pname:offset member of the sname:VkDescriptorBufferInfo structure for uniform buffers. When a descriptor of type ename:VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER or ename:VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC is updated, the pname:offset must: be an integer multiple of this limit. Similarly, dynamic offsets for uniform buffers must: be multiples of this limit.</member>
-        <member name="minStorageBufferOffsetAlignment"> pname:minStorageBufferOffsetAlignment is the minimum required alignment, in bytes, for the pname:offset member of the sname:VkDescriptorBufferInfo structure for storage buffers. When a descriptor of type ename:VK_DESCRIPTOR_TYPE_STORAGE_BUFFER or ename:VK_DESCRIPTOR_TYPE_STORAGE_BUFFER_DYNAMIC is updated, the pname:offset must: be an integer multiple of this limit. Similarly, dynamic offsets for storage buffers must: be multiples of this limit.</member>
+        <member name="minMemoryMapAlignment">pname:minMemoryMapAlignment is the minimum required: alignment, in bytes, of host visible memory allocations within the host address space. When mapping a memory allocation with flink:vkMapMemory, subtracting pname:offset bytes from the returned pointer will always produce an integer multiple of this limit. See &lt;&lt;memory-device-hostaccess&gt;&gt;.</member>
+        <member name="minTexelBufferOffsetAlignment"> pname:minTexelBufferOffsetAlignment is the minimum required: alignment, in bytes, for the pname:offset member of the sname:VkBufferViewCreateInfo structure for texel buffers. When a buffer view is created for a buffer which was created with ename:VK_BUFFER_USAGE_UNIFORM_TEXEL_BUFFER_BIT or ename:VK_BUFFER_USAGE_STORAGE_TEXEL_BUFFER_BIT set in the pname:usage member of the sname:VkBufferCreateInfo structure, the pname:offset must: be an integer multiple of this limit.</member>
+        <member name="minUniformBufferOffsetAlignment"> pname:minUniformBufferOffsetAlignment is the minimum required: alignment, in bytes, for the pname:offset member of the sname:VkDescriptorBufferInfo structure for uniform buffers. When a descriptor of type ename:VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER or ename:VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC is updated, the pname:offset must: be an integer multiple of this limit. Similarly, dynamic offsets for uniform buffers must: be multiples of this limit.</member>
+        <member name="minStorageBufferOffsetAlignment"> pname:minStorageBufferOffsetAlignment is the minimum required: alignment, in bytes, for the pname:offset member of the sname:VkDescriptorBufferInfo structure for storage buffers. When a descriptor of type ename:VK_DESCRIPTOR_TYPE_STORAGE_BUFFER or ename:VK_DESCRIPTOR_TYPE_STORAGE_BUFFER_DYNAMIC is updated, the pname:offset must: be an integer multiple of this limit. Similarly, dynamic offsets for storage buffers must: be multiples of this limit.</member>
         <member name="minTexelOffset">pname:minTexelOffset is the minimum offset value for the code:ConstOffset image operand of any of the code:OpImageSample* or code:OpImageFetch* image instructions.</member>
         <member name="maxTexelOffset">pname:maxTexelOffset is the maximum offset value for the code:ConstOffset image operand of any of the code:OpImageSample* or code:OpImageFetch* image instructions.</member>
         <member name="minTexelGatherOffset">pname:minTexelGatherOffset is the minimum offset value for the code:Offset or code:ConstOffsets image operands of any of the code:OpImage*code:Gather image instructions.</member>
@@ -1850,7 +1976,7 @@
         <member name="storageImageSampleCounts"> pname:storageImageSampleCounts is a bitmask^1^ of elink:VkSampleCountFlagBits bits indicating the sample counts supported for all 2D images created with ename:VK_IMAGE_TILING_OPTIMAL, and pname:usage containing ename:VK_IMAGE_USAGE_STORAGE_BIT.</member>
         <member name="maxSampleMaskWords">pname:maxSampleMaskWords is the maximum number of array elements of a variable decorated with the code:SampleMask built-in decoration.</member>
         <member name="timestampComputeAndGraphics"> pname:timestampComputeAndGraphics indicates support for timestamps on all graphics and compute queues. If this limit is set to ename:VK_TRUE, all queues that advertise the ename:VK_QUEUE_GRAPHICS_BIT or ename:VK_QUEUE_COMPUTE_BIT in the sname:VkQueueFamilyProperties::pname:queueFlags support sname:VkQueueFamilyProperties::pname:timestampValidBits of at least 36. See &lt;&lt;queries-timestamps, Timestamp Queries&gt;&gt;.</member>
-        <member name="timestampPeriod">pname:timestampPeriod is the number of nanoseconds required for a timestamp query to be incremented by 1. See &lt;&lt;queries-timestamps, Timestamp Queries&gt;&gt;.</member>
+        <member name="timestampPeriod">pname:timestampPeriod is the number of nanoseconds required: for a timestamp query to be incremented by 1. See &lt;&lt;queries-timestamps, Timestamp Queries&gt;&gt;.</member>
         <member name="maxClipDistances">pname:maxClipDistances is the maximum number of clip distances that can: be used in a single shader stage. The size of any array declared with the code:ClipDistance built-in decoration in a shader module must: be less than or equal to this limit.</member>
         <member name="maxCullDistances">pname:maxCullDistances is the maximum number of cull distances that can: be used in a single shader stage. The size of any array declared with the code:CullDistance built-in decoration in a shader module must: be less than or equal to this limit.</member>
         <member name="maxCombinedClipAndCullDistances"> pname:maxCombinedClipAndCullDistances is the maximum combined number of clip and cull distances that can: be used in a single shader stage. The sum of the sizes of any pair of arrays declared with the code:ClipDistance and code:CullDistance built-in decoration used by a single shader stage in a shader module must: be less than or equal to this limit.</member>
@@ -1863,7 +1989,7 @@
         <member name="standardSampleLocations"> pname:standardSampleLocations indicates whether rasterization uses the standard sample locations as documented in &lt;&lt;primsrast-multisampling,Multisampling&gt;&gt;. If set to ename:VK_TRUE, the implementation uses the documented sample locations. If set to ename:VK_FALSE, the implementation may: use different sample locations.</member>
         <member name="optimalBufferCopyOffsetAlignment"> pname:optimalBufferCopyOffsetAlignment is the optimal buffer offset alignment in bytes for fname:vkCmdCopyBufferToImage and fname:vkCmdCopyImageToBuffer. The per texel alignment requirements are still enforced, this is just an additional alignment recommendation for optimal performance and power.</member>
         <member name="optimalBufferCopyRowPitchAlignment"> pname:optimalBufferCopyRowPitchAlignment is the optimal buffer row pitch alignment in bytes for fname:vkCmdCopyBufferToImage and fname:vkCmdCopyImageToBuffer. Row pitch is the number of bytes between texels with the same X coordinate in adjacent rows (Y coordinates differ by one). The per texel alignment requirements are still enforced, this is just an additional alignment recommendation for optimal performance and power.</member>
-        <member name="nonCoherentAtomSize"> pname:nonCoherentAtomSize is the size and alignment in bytes that bounds concurrent access to &lt;&lt;memory-device-hostaccess, host-mapped device memory&gt;&gt;.</member>
+        <member name="nonCoherentAtomSize">pname:nonCoherentAtomSize is the size and alignment in bytes that bounds concurrent access to &lt;&lt;memory-device-hostaccess, host-mapped device memory&gt;&gt;.</member>
       </members>
     </type>
     <type name="VkPhysicalDeviceMemoryProperties" summary="Structure specifying physical device memory properties.">
@@ -1883,9 +2009,9 @@
         <para>The loop will find the first supported memory type that has all bits requested in code:properties set. If there is no exact match, it will find a closest match (i.e. a memory type with the fewest additional bits set), which has some additional bits set but which are not detrimental to the behaviors requested by code:properties. The application can: first search for the optimal properties, e.g. a memory type that is device-local or supports coherent cached accesses, as appropriate for the intended usage, and if such a memory type is not present can: fallback to searching for a less optimal but guaranteed set of properties such as "0" or "host-visible and coherent".</para>
       </description>
       <members>
-        <member name="memoryTypeCount">pname:memoryTypeCount is the number of valid elements in the pname:pMemoryRanges array.</member>
+        <member name="memoryTypeCount">pname:memoryTypeCount is the number of valid elements in the pname:memoryTypes array.</member>
         <member name="memoryTypes">pname:memoryTypes is an array of slink:VkMemoryType structures describing the _memory types_ that can: be used to access memory allocated from the heaps specified by pname:memoryHeaps.</member>
-        <member name="memoryHeapCount">pname:memoryHeapCount is the number of valid elements in the pname:pMemoryRanges array.</member>
+        <member name="memoryHeapCount">pname:memoryHeapCount is the number of valid elements in the pname:memoryHeaps array.</member>
         <member name="memoryHeaps">pname:memoryHeaps is an array of slink:VkMemoryHeap structures describing the _memory heaps_ from which memory can: be allocated.</member>
       </members>
     </type>
@@ -2192,12 +2318,12 @@
       <members>
         <member name="sType">pname:sType is the type of this structure and must: be ename:VK_STRUCTURE_TYPE_PRESENT_INFO_KHR.</member>
         <member name="pNext">pname:pNext is `NULL` or a pointer to an extension-specific structure.</member>
-        <member name="waitSemaphoreCount">pname:waitSemaphoreCount is the number of semaphores to wait for before issuing the present request.  The number may: be zero.</member>
+        <member name="waitSemaphoreCount">pname:waitSemaphoreCount is the number of semaphores to wait for before issuing the present request. The number may: be zero.</member>
         <member name="pWaitSemaphores">pname:pWaitSemaphores, if not code:VK_NULL_HANDLE, is an array of sname:VkSemaphore objects with pname:waitSemaphoreCount entries, and specifies the semaphores to wait for before issuing the present request.</member>
         <member name="swapchainCount">pname:swapchainCount is the number of swapchains being presented to by this command.</member>
-        <member name="pSwapchains">pname:pSwapchains is an array of sname:VkSwapchainKHR objects with pname:swapchainCount entries.  A given swapchain must: not appear in this list more than once.</member>
-        <member name="pImageIndices">pname:pImageIndices is an array of indices into the array of each swapchain's presentable images, with pname:swapchainCount entries.  Each entry in this array identifies the image to present on the corresponding entry in the pname:pSwapchains array.</member>
-        <member name="pResults">pname:pResults is an array of ename:VkResult typed elements with pname:swapchainCount entries. Applications that don't need per-swapchain results can: use `NULL` for pname:pResults. If non-`NULL`, each entry in pname:pResults will be set to the ename:VkResult for presenting the swapchain corresponding to the same index in pname:pSwapchains.</member>
+        <member name="pSwapchains">pname:pSwapchains is an array of sname:VkSwapchainKHR objects with pname:swapchainCount entries. A given swapchain must: not appear in this list more than once.</member>
+        <member name="pImageIndices">pname:pImageIndices is an array of indices into the array of each swapchain's presentable images, with pname:swapchainCount entries. Each entry in this array identifies the image to present on the corresponding entry in the pname:pSwapchains array.</member>
+        <member name="pResults">pname:pResults is an array of ename:VkResult typed elements with pname:swapchainCount entries. Applications that do not need per-swapchain results can: use `NULL` for pname:pResults. If non-`NULL`, each entry in pname:pResults will be set to the ename:VkResult for presenting the swapchain corresponding to the same index in pname:pSwapchains.</member>
       </members>
     </type>
     <type name="VkPresentModeKHR" summary="Presentation mode supported for a surface.">
@@ -2332,7 +2458,7 @@
     </type>
     <type name="VkRenderPass" summary="Opaque handle to a render pass object.">
       <specification>
-        <para>A _render pass_ represents a collection of attachments, subpasses, and dependencies between the subpasses, and describes how the attachments are used over the course of the subpasses. The use of a render pass in a command buffer is a  _render pass instance_.</para>
+        <para>A _render pass_ represents a collection of attachments, subpasses, and dependencies between the subpasses, and describes how the attachments are used over the course of the subpasses. The use of a render pass in a command buffer is a _render pass instance_.</para>
       </specification>
       <description />
       <members />
@@ -2375,7 +2501,7 @@
       </specification>
       <description>
         <para>.Success Codes * ename:VK_SUCCESS Command successfully completed * ename:VK_NOT_READY A fence or query has not yet completed * ename:VK_TIMEOUT A wait operation has not completed in the specified time * ename:VK_EVENT_SET An event is signaled * ename:VK_EVENT_RESET An event is unsignaled * ename:VK_INCOMPLETE A return array was too small for the result ifdef::VK_KHR_swapchain[] * ename:VK_SUBOPTIMAL_KHR A swapchain no longer matches the surface properties exactly, but can: still be used to present to the surface successfully. endif::VK_KHR_swapchain[]</para>
-        <para>.Error codes * ename:VK_ERROR_OUT_OF_HOST_MEMORY A host memory allocation has failed. * ename:VK_ERROR_OUT_OF_DEVICE_MEMORY A device memory allocation has failed. * ename:VK_ERROR_INITIALIZATION_FAILED Initialization of an object could not be completed for implementation-specific reasons. * ename:VK_ERROR_DEVICE_LOST The logical or physical device has been lost. See &lt;&lt;devsandqueues-lost-device,Lost Device&gt;&gt; * ename:VK_ERROR_MEMORY_MAP_FAILED Mapping of a memory object has failed. * ename:VK_ERROR_LAYER_NOT_PRESENT A requested layer is not present or could not be loaded. * ename:VK_ERROR_EXTENSION_NOT_PRESENT A requested extension is not supported. * ename:VK_ERROR_FEATURE_NOT_PRESENT A requested feature is not supported. * ename:VK_ERROR_INCOMPATIBLE_DRIVER The requested version of Vulkan is not supported by the driver or is otherwise incompatible for implementation-specific reasons. * ename:VK_ERROR_TOO_MANY_OBJECTS Too many objects of the type have already been created. * ename:VK_ERROR_FORMAT_NOT_SUPPORTED A requested format is not supported on this device. * ename:VK_ERROR_FRAGMENTED_POOL A requested pool allocation has failed due to fragmentation of the pool's memory. ifdef::VK_KHR_surface[] * ename:VK_ERROR_SURFACE_LOST_KHR A surface is no longer available. * ename:VK_ERROR_NATIVE_WINDOW_IN_USE_KHR The requested window is already connected to a VkSurfaceKHR, or to some other non-Vulkan API. endif::VK_KHR_surface[] ifdef::VK_KHR_swapchain[] * ename:VK_ERROR_OUT_OF_DATE_KHR A surface has changed in such a way that it is no longer compatible with the swapchain, and further presentation requests using the swapchain will fail. Applications must: query the new surface properties and recreate their swapchain if they wish to continue presenting to the surface. endif::VK_KHR_swapchain[] ifdef::VK_KHR_display_swapchain[] * ename:VK_ERROR_INCOMPATIBLE_DISPLAY_KHR The display used by a swapchain does not use the same presentable image layout, or is incompatible in a way that prevents sharing an image. endif::VK_KHR_display_swapchain[] ifdef::VK_NV_glsl_shader[] * ename:VK_ERROR_INVALID_SHADER_NV One or more shaders failed to compile or link. More details are reported back to the application via pname:VK_EXT_debug_report if enabled. endif::VK_NV_glsl_shader[]</para>
+        <para>.Error codes * ename:VK_ERROR_OUT_OF_HOST_MEMORY A host memory allocation has failed. * ename:VK_ERROR_OUT_OF_DEVICE_MEMORY A device memory allocation has failed. * ename:VK_ERROR_INITIALIZATION_FAILED Initialization of an object could not be completed for implementation-specific reasons. * ename:VK_ERROR_DEVICE_LOST The logical or physical device has been lost. See &lt;&lt;devsandqueues-lost-device,Lost Device&gt;&gt; * ename:VK_ERROR_MEMORY_MAP_FAILED Mapping of a memory object has failed. * ename:VK_ERROR_LAYER_NOT_PRESENT A requested layer is not present or could not be loaded. * ename:VK_ERROR_EXTENSION_NOT_PRESENT A requested extension is not supported. * ename:VK_ERROR_FEATURE_NOT_PRESENT A requested feature is not supported. * ename:VK_ERROR_INCOMPATIBLE_DRIVER The requested version of Vulkan is not supported by the driver or is otherwise incompatible for implementation-specific reasons. * ename:VK_ERROR_TOO_MANY_OBJECTS Too many objects of the type have already been created. * ename:VK_ERROR_FORMAT_NOT_SUPPORTED A requested format is not supported on this device. * ename:VK_ERROR_FRAGMENTED_POOL A requested pool allocation has failed due to fragmentation of the pool's memory. ifdef::VK_KHR_surface[] * ename:VK_ERROR_SURFACE_LOST_KHR A surface is no longer available. * ename:VK_ERROR_NATIVE_WINDOW_IN_USE_KHR The requested window is already connected to a VkSurfaceKHR, or to some other non-Vulkan API. endif::VK_KHR_surface[] ifdef::VK_KHR_swapchain[] * ename:VK_ERROR_OUT_OF_DATE_KHR A surface has changed in such a way that it is no longer compatible with the swapchain, and further presentation requests using the swapchain will fail. Applications must: query the new surface properties and recreate their swapchain if they wish to continue presenting to the surface. endif::VK_KHR_swapchain[] ifdef::VK_KHR_display_swapchain[] * ename:VK_ERROR_INCOMPATIBLE_DISPLAY_KHR The display used by a swapchain does not use the same presentable image layout, or is incompatible in a way that prevents sharing an image. endif::VK_KHR_display_swapchain[] ifdef::VK_NV_glsl_shader[] * ename:VK_ERROR_INVALID_SHADER_NV One or more shaders failed to compile or link. More details are reported back to the application via +VK_EXT_debug_report+ if enabled. endif::VK_NV_glsl_shader[]</para>
         <para>If a command returns a run time error, it will leave any result pointers unmodified, unless other behavior is explicitly defined in the specification.</para>
         <para>Out of memory errors do not damage any currently existing Vulkan objects. Objects that have already been successfully created can: still be used by the application.</para>
         <para>Performance-critical commands generally do not have return codes. If a run time error occurs in such commands, the implementation will defer reporting the error until a specified point. For commands that record into command buffers (ftext:vkCmd*) run time errors are reported by fname:vkEndCommandBuffer.</para>
@@ -2474,7 +2600,7 @@
         <para>Ranges of buffers and image subresources of image objects created using ename:VK_SHARING_MODE_EXCLUSIVE must: only be accessed by queues in the same queue family at any given time. In order for a different queue family to be able to interpret the memory contents of a range or image subresource, the application must: transfer exclusive ownership of the range or image subresource between the source and destination queue families with the following sequence of operations:</para>
         <para>. Release exclusive ownership from the source queue family to the destination queue family. . Use semaphores to ensure proper execution control for the ownership transfer. . Acquire exclusive ownership for the destination queue family from the source queue family.</para>
         <para>To release exclusive ownership of a range of a buffer or image subresource of an image object, the application must: execute a buffer or image memory barrier, respectively (see slink:VkBufferMemoryBarrier and slink:VkImageMemoryBarrier) on a queue from the source queue family. The pname:srcQueueFamilyIndex parameter of the barrier must: be set to the source queue family index, and the pname:dstQueueFamilyIndex parameter to the destination queue family index.</para>
-        <para>To acquire exclusive ownership, the application must: execute the same buffer or image memory barrier on a queue from the destination queue family.</para>
+        <para>To acquire exclusive ownership, the application must: execute the same buffer or image memory barrier (i.e. an identically defined instance of the slink:VkBufferMemoryBarrier or slink:VkImageMemoryBarrier structure that was used for the exclusive ownership release) on a queue from the destination queue family.</para>
         <para>Upon creation, resources using ename:VK_SHARING_MODE_EXCLUSIVE are not owned by any queue family. A buffer or image memory barrier is not required to acquire ownership when no queue family owns the resource - it is implicitly acquired upon first use within a queue. However, images still require a &lt;&lt;resources-image-layouts,layout transition&gt;&gt; from ename:VK_IMAGE_LAYOUT_UNDEFINED or ename:VK_IMAGE_LAYOUT_PREINITIALIZED before being used on the first queue. This layout transition can: either be accomplished by an image memory barrier or by use in a render pass instance.</para>
         <para>Once a queue family has used a range or image subresource of an ename:VK_SHARING_MODE_EXCLUSIVE resource, its contents are undefined to other queue families unless ownership is transferred. The contents may: also become undefined for other reasons, e.g. as a result of writes to an image subresource that aliases the same memory. A queue family can: take ownership of a range or image subresource without an ownership transfer in the same way as for a resource that was just created, however doing so means any contents written by other queue families or via incompatible aliases are undefined.</para>
       </description>
@@ -2709,14 +2835,14 @@
       </description>
       <members>
         <member name="minImageCount">pname:minImageCount is the minimum number of images the specified device supports for a swapchain created for the surface.</member>
-        <member name="maxImageCount">pname:maxImageCount is the maximum number of images the specified device supports for a swapchain created for the surface.  A value of `0` means that there is no limit on the number of images, though there may: be limits related to the total amount of memory used by swapchain images.</member>
+        <member name="maxImageCount">pname:maxImageCount is the maximum number of images the specified device supports for a swapchain created for the surface. A value of 0 means that there is no limit on the number of images, though there may: be limits related to the total amount of memory used by swapchain images.</member>
         <member name="currentExtent">pname:currentExtent is the current width and height of the surface, or the special value latexmath:[$(0xFFFFFFFF, 0xFFFFFFFF)$] indicating that the surface size will be determined by the extent of a swapchain targeting the surface.</member>
         <member name="minImageExtent">pname:minImageExtent contains the smallest valid swapchain extent for the surface on the specified device.</member>
         <member name="maxImageExtent">pname:maxImageExtent contains the largest valid swapchain extent for the surface on the specified device.</member>
         <member name="maxImageArrayLayers">pname:maxImageArrayLayers is the maximum number of layers swapchain images can: have for a swapchain created for this device and surface.</member>
         <member name="supportedTransforms">pname:supportedTransforms is a bitmask of elink:VkSurfaceTransformFlagBitsKHR, describing the presentation transforms supported for the surface on the specified device.</member>
         <member name="currentTransform">pname:currentTransform is a bitmask of elink:VkSurfaceTransformFlagBitsKHR, describing the surface's current transform relative to the presentation engine's natural orientation.</member>
-        <member name="supportedCompositeAlpha">pname:supportedCompositeAlpha is a bitmask of elink:VkCompositeAlphaFlagBitsKHR, representing the alpha compositing modes supported by the presentation engine for the surface on the specified device.  Opaque composition can: be achieved in any alpha compositing mode by either using a swapchain image format that has no alpha component, or by ensuring that all pixels in the swapchain images have an alpha value of 1.0.</member>
+        <member name="supportedCompositeAlpha">pname:supportedCompositeAlpha is a bitmask of elink:VkCompositeAlphaFlagBitsKHR, representing the alpha compositing modes supported by the presentation engine for the surface on the specified device. Opaque composition can: be achieved in any alpha compositing mode by either using a swapchain image format that has no alpha component, or by ensuring that all pixels in the swapchain images have an alpha value of 1.0.</member>
         <member name="supportedUsageFlags">pname:supportedUsageFlags is a bitmask of elink:VkImageUsageFlagBits representing the ways the application can: use the presentable images of a swapchain created for the surface on the specified device. ename:VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT must: be included in the set but implementations may: support additional usages.</member>
       </members>
     </type>
@@ -2747,7 +2873,7 @@
       <specification />
       <description>
         <para>[NOTE] .Note ==== Applications should: set this value to ename:VK_TRUE if they do not expect to read back the content of presentable images before presenting them or after reacquiring them and if their pixel shaders do not have any side effects that require them to run for all pixels in the presentable image. ====</para>
-        <para>* pname:oldSwapchain, if not code:VK_NULL_HANDLE, specifies the swapchain that will be replaced by the new swapchain being created.  The new swapchain will be a descendant of pname:oldSwapchain.  Further, any descendants of the new swapchain will also be descendants of pname:oldSwapchain.  Upon calling fname:vkCreateSwapchainKHR with a pname:oldSwapchain that is not code:VK_NULL_HANDLE, any images not acquired by the application may: be freed by the implementation, which may: occur even if creation of the new swapchain fails. The application must: destroy the old swapchain to free all memory associated with the old swapchain. The application must: wait for the completion of any outstanding rendering to images it currently has acquired at the time the swapchain is destroyed. The application can: continue to present any images it acquired and has not yet presented using the old swapchain, as long as it has not entered a state that causes it to return ename:VK_ERROR_OUT_OF_DATE_KHR. However, the application cannot: acquire any more images from the old swapchain regardless of whether or not creation of the new swapchain succeeds.</para>
+        <para>* pname:oldSwapchain, if not code:VK_NULL_HANDLE, specifies the swapchain that will be replaced by the new swapchain being created. The new swapchain will be a descendant of pname:oldSwapchain. Further, any descendants of the new swapchain will also be descendants of pname:oldSwapchain. Upon calling fname:vkCreateSwapchainKHR with a pname:oldSwapchain that is not code:VK_NULL_HANDLE, any images not acquired by the application may: be freed by the implementation, which may: occur even if creation of the new swapchain fails. The application must: destroy the old swapchain to free all memory associated with the old swapchain. The application must: wait for the completion of any outstanding rendering to images it currently has acquired at the time the swapchain is destroyed. The application can: continue to present any images it acquired and has not yet presented using the old swapchain, as long as it has not entered a state that causes it to return ename:VK_ERROR_OUT_OF_DATE_KHR. However, the application cannot: acquire any more images from the old swapchain regardless of whether or not creation of the new swapchain succeeds.</para>
       </description>
       <members>
         <member name="sType">pname:sType is the type of this structure and must: be ename:VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR.</member>
@@ -2766,7 +2892,7 @@
         <member name="preTransform">pname:preTransform is a bitmask of elink:VkSurfaceTransformFlagBitsKHR, describing the transform, relative to the presentation engine's natural orientation, applied to the image content prior to presentation. If it does not match the pname:currentTransform value returned by fname:vkGetPhysicalDeviceSurfaceCapabilitiesKHR, the presentation engine will transform the image content as part of the presentation operation.</member>
         <member name="compositeAlpha">pname:compositeAlpha is a bitmask of elink:VkCompositeAlphaFlagBitsKHR, indicating the alpha compositing mode to use when this surface is composited together with other surfaces on certain window systems.</member>
         <member name="presentMode">pname:presentMode is the presentation mode the swapchain will use. A swapchain's present mode determines how incoming present requests will be processed and queued internally.</member>
-        <member name="clipped">pname:clipped indicates whether the Vulkan implementation is allowed to discard rendering operations that affect regions of the surface which aren't visible.</member>
+        <member name="clipped">pname:clipped indicates whether the Vulkan implementation is allowed to discard rendering operations that affect regions of the surface which are not visible.</member>
         <member name="VK_TRUE">* If set to ename:VK_TRUE, the presentable images associated with the swapchain may: not own all of their pixels. Pixels in the presentable images that correspond to regions of the target surface obscured by another window on the desktop or subject to some other clipping mechanism will have undefined content when read back. Pixel shaders may: not execute for these pixels, and thus any side affects they would have had will not occur.</member>
         <member name="VK_FALSE">* If set to ename:VK_FALSE, presentable images associated with the swapchain will own all the pixels they contain. Setting this value to ename:VK_TRUE does not guarantee any clipping will occur, but allows more optimal presentation methods to be used on some platforms.</member>
       </members>
@@ -2852,7 +2978,7 @@
     </type>
     <type name="VkWin32KeyedMutexAcquireReleaseInfoNV" summary="Use Windows keyex mutex mechanism to synchronize work.">
       <specification>
-        <para>When submitting work that operates on memory imported from a Direct3D 11 resource to a queue, the keyed mutex mechanism may: be used in addition to Vulkan semaphores to synchronize the work.  Keyed mutexes are a property of a properly created shareable Direct3D 11 resource. They can: only be used if the imported resource was created with the etext:D3D11_RESOURCE_MISC_SHARED_KEYEDMUTEX flag.</para>
+        <para>When submitting work that operates on memory imported from a Direct3D 11 resource to a queue, the keyed mutex mechanism may: be used in addition to Vulkan semaphores to synchronize the work. Keyed mutexes are a property of a properly created shareable Direct3D 11 resource. They can: only be used if the imported resource was created with the etext:D3D11_RESOURCE_MISC_SHARED_KEYEDMUTEX flag.</para>
         <para>To acquire keyed mutexes before submitted work and/or release them after, add a slink:VkWin32KeyedMutexAcquireReleaseInfoNV structure to the pname:pNext chain of the slink:VkSubmitInfo structure.</para>
       </specification>
       <description>
@@ -2896,8 +3022,8 @@
         <member name="sType">pname:sType is the type of this structure and must: be ename:VK_STRUCTURE_TYPE_XCB_SURFACE_CREATE_INFO_KHR.</member>
         <member name="pNext">pname:pNext is `NULL` or a pointer to an extension-specific structure.</member>
         <member name="flags">pname:flags is reserved for future use.</member>
-        <member name="connection">pname:connection is a pointer to an sname:xcb_connection_t to the X server.</member>
-        <member name="window">pname:window is the sname:xcb_window_t for the X11 window to associate the surface with.</member>
+        <member name="connection">pname:connection is a pointer to an code:xcb_connection_t to the X server.</member>
+        <member name="window">pname:window is the code:xcb_window_t for the X11 window to associate the surface with.</member>
       </members>
     </type>
     <type name="VkXlibSurfaceCreateInfoKHR" summary="Structure specifying parameters of a newly created Xlib surface object.">
@@ -2907,8 +3033,8 @@
         <member name="sType">pname:sType is the type of this structure and must: be ename:VK_STRUCTURE_TYPE_XLIB_SURFACE_CREATE_INFO_KHR.</member>
         <member name="pNext">pname:pNext is `NULL` or a pointer to an extension-specific structure.</member>
         <member name="flags">pname:flags is reserved for future use.</member>
-        <member name="dpy">pname:dpy is a pointer to an Xlib Display connection to the X server.</member>
-        <member name="window">pname:window is an Xlib Window to associate the surface with.</member>
+        <member name="dpy">pname:dpy is a pointer to an Xlib code:Display connection to the X server.</member>
+        <member name="window">pname:window is an Xlib code:Window to associate the surface with.</member>
       </members>
     </type>
   </types>
@@ -2935,6 +3061,9 @@
     <command name="vkCmdCopyImage" summary="Copy data between images." />
     <command name="vkCmdCopyImageToBuffer" summary="Copy image data into a buffer." />
     <command name="vkCmdCopyQueryPoolResults" summary="Copy the results of queries in a query pool to a buffer object." />
+    <command name="vkCmdDebugMarkerBeginEXT" summary="Open a command buffer marker region." />
+    <command name="vkCmdDebugMarkerEndEXT" summary="Close a command buffer marker region." />
+    <command name="vkCmdDebugMarkerInsertEXT" summary="Insert a marker label into a command buffer." />
     <command name="vkCmdDispatch" summary="Dispatch compute work items." />
     <command name="vkCmdDispatchIndirect" summary="Dispatch compute work items using indirect parameters." />
     <command name="vkCmdDraw" summary="Draw primitives." />
@@ -2971,6 +3100,7 @@
     <command name="vkCreateBufferView" summary="Create a new buffer view object." />
     <command name="vkCreateCommandPool" summary="Create a new command pool object." />
     <command name="vkCreateComputePipelines" summary="Creates a new compute pipeline object." />
+    <command name="vkCreateDebugReportCallbackEXT" summary="Create a debug report callback object." />
     <command name="vkCreateDescriptorPool" summary="Creates a descriptor pool object." />
     <command name="vkCreateDescriptorSetLayout" summary="Create a new descriptor set layout." />
     <command name="vkCreateDevice" summary="Create a new device instance." />
@@ -2997,9 +3127,12 @@
     <command name="vkCreateWin32SurfaceKHR" summary="Create a slink:VkSurfaceKHR object for an Win32 native window." />
     <command name="vkCreateXcbSurfaceKHR" summary="Create a slink:VkSurfaceKHR object for a X11 window, using the XCB client-side library." />
     <command name="vkCreateXlibSurfaceKHR" summary="Create a slink:VkSurfaceKHR object for an X11 window, using the Xlib client-side library." />
+    <command name="vkDebugMarkerSetObjectNameEXT" summary="Give a user-friendly name to an object." />
+    <command name="vkDebugMarkerSetObjectTagEXT" summary="Attach arbitrary data to an object." />
     <command name="vkDestroyBuffer" summary="Destroy a buffer object." />
     <command name="vkDestroyBufferView" summary="Destroy a buffer view object." />
     <command name="vkDestroyCommandPool" summary="Destroy a command pool object." />
+    <command name="vkDestroyDebugReportCallbackEXT" summary="Destroy a debug report callback object." />
     <command name="vkDestroyDescriptorPool" summary="Destroy a descriptor pool object." />
     <command name="vkDestroyDescriptorSetLayout" summary="Destroy a descriptor set layout object." />
     <command name="vkDestroyDevice" summary="Destroy a logical device." />
