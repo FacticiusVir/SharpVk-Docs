@@ -136,7 +136,7 @@
       <specification />
       <description />
       <members>
-        <member name="sType">pname:sType is the type of this structure and must: be ename:VK_STRUCTURE_TYPE_ANDROID_SURFACE_CREATE_INFO_KHR.</member>
+        <member name="sType">pname:sType is the type of this structure.</member>
         <member name="pNext">pname:pNext is `NULL` or a pointer to an extension-specific structure.</member>
         <member name="flags">pname:flags is reserved for future use.</member>
         <member name="window">pname:window is a pointer to the code:ANativeWindow to associate the surface with.</member>
@@ -641,7 +641,7 @@
       <specification />
       <description />
       <members>
-        <member name="sType">pname:sType is the type of this structure and must: be ename:VK_STRUCTURE_TYPE_DEBUG_MARKER_MARKER_INFO_EXT.</member>
+        <member name="sType">pname:sType is the type of this structure.</member>
         <member name="pNext">pname:pNext is `NULL` or a pointer to an extension-specific structure.</member>
         <member name="pMarkerName">pname:pMarkerName is a pointer to a null-terminated UTF-8 string that contains the name of the marker.</member>
         <member name="color">pname:color is an optional RGBA color value that can be associated with the marker. A particular implementation may: choose to ignore this color value. The values contain RGBA values in order, in the range 0.0 to 1.0. If all elements in pname:color are set to 0.0 then it is ignored.</member>
@@ -653,7 +653,7 @@
         <para>Applications may: change the name associated with an object simply by calling fname:vkDebugMarkerSetObjectNameEXT again with a new string. To remove a previously set name, pname:pName should: be set to an empty string.</para>
       </description>
       <members>
-        <member name="sType">pname:sType is the type of this structure and must: be ename:VK_STRUCTURE_TYPE_DEBUG_MARKER_OBJECT_NAME_INFO_EXT.</member>
+        <member name="sType">pname:sType is the type of this structure.</member>
         <member name="pNext">pname:pNext is `NULL` or a pointer to an extension-specific structure.</member>
         <member name="objectType">pname:objectType is a elink:VkDebugReportObjectTypeEXT specifying the type of the object to be named.</member>
         <member name="object">pname:object is the object to be named.</member>
@@ -666,7 +666,7 @@
         <para>The pname:tagName parameter gives a name or identifier to the type of data being tagged. This can be used by debugging layers to easily filter for only data that can be used by that implementation.</para>
       </description>
       <members>
-        <member name="sType">pname:sType is the type of this structure and must: be ename:VK_STRUCTURE_TYPE_DEBUG_MARKER_OBJECT_TAG_INFO_EXT.</member>
+        <member name="sType">pname:sType is the type of this structure.</member>
         <member name="pNext">pname:pNext is `NULL` or a pointer to an extension-specific structure.</member>
         <member name="objectType">pname:objectType is a elink:VkDebugReportObjectTypeEXT specifying the type of the object to be named.</member>
         <member name="object">pname:object is the object to be tagged.</member>
@@ -885,7 +885,7 @@
     <type name="VkDescriptorSetLayoutBinding" summary="Structure specifying a descriptor set layout binding.">
       <specification />
       <description>
-        <para>The above layout definition allows the descriptor bindings to be specified sparsely such that not all binding numbers between 0 and the maximum binding number need to be specified in the pname:pBindings array. However, all binding numbers between 0 and the maximum binding number in the slink:VkDescriptorSetLayoutCreateInfo::pname:pBindings array may: consume memory in the descriptor set layout even if not all descriptor bindings are used, though it should: not consume additional memory from the descriptor pool.</para>
+        <para>The above layout definition allows the descriptor bindings to be specified sparsely such that not all binding numbers between 0 and the maximum binding number need to be specified in the pname:pBindings array. Bindings that are not specified have a pname:descriptorCount and pname:stageFlags of zero, and the pname:descriptorType is treated as undefined. However, all binding numbers between 0 and the maximum binding number in the slink:VkDescriptorSetLayoutCreateInfo::pname:pBindings array may: consume memory in the descriptor set layout even if not all descriptor bindings are used, though it should: not consume additional memory from the descriptor pool.</para>
         <para>[NOTE] .Note ==== The maximum binding number specified should: be as compact as possible to avoid wasted memory. ====</para>
         <para>.Valid Usage **** * If pname:descriptorType is ename:VK_DESCRIPTOR_TYPE_SAMPLER or ename:VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, and pname:descriptorCount is not `0` and pname:pImmutableSamplers is not `NULL`, pname:pImmutableSamplers must: be a pointer to an array of pname:descriptorCount valid sname:VkSampler handles * If pname:descriptorCount is not `0`, pname:stageFlags must: be a valid combination of elink:VkShaderStageFlagBits values ****</para>
       </description>
@@ -986,7 +986,7 @@
         <para>.Valid Usage **** * The pname:width and pname:height members of the pname:visibleRegion member of pname:parameters must: be greater than `0` * The pname:refreshRate member of pname:parameters must: be greater than `0` ****</para>
       </description>
       <members>
-        <member name="sType">pname:sType is the type of this structure and must: be ename:VK_STRUCTURE_TYPE_DISPLAY_MODE_CREATE_INFO_KHR.</member>
+        <member name="sType">pname:sType is the type of this structure.</member>
         <member name="pNext">pname:pNext is `NULL` or a pointer to an extension-specific structure.</member>
         <member name="flags">pname:flags is reserved for future use, and must: be zero.</member>
         <member name="parameters">pname:parameters is a sname:VkDisplayModeParametersKHR structure describing the display parameters to use in creating the new mode. If the parameters are not compatible with the specified display, the implementation must: return ename:VK_ERROR_INITIALIZATION_FAILED.</member>
@@ -1052,7 +1052,7 @@
         <para>.Valid Usage **** * pname:srcRect must: specify a rectangular region that is a subset of the image being presented * pname:dstRect must: specify a rectangular region that is a subset of the pname:visibleRegion parameter of the display mode the swapchain being presented uses * If the pname:persistentContent member of the sname:VkDisplayPropertiesKHR structure returned by fname:vkGetPhysicalDeviceDisplayPropertiesKHR for the display the present operation targets then pname:persistent must: be ename:VK_FALSE ****</para>
       </description>
       <members>
-        <member name="sType">pname:sType is the type of this structure and must: be ename:VK_STRUCTURE_TYPE_DISPLAY_PRESENT_INFO_KHR.</member>
+        <member name="sType">pname:sType is the type of this structure.</member>
         <member name="pNext">pname:pNext is `NULL` or a pointer to an extension-specific structure.</member>
         <member name="srcRect">pname:srcRect is a rectangular region of pixels to present. It must: be a subset of the image being presented. If sname:VkDisplayPresentInfoKHR is not specified, this region will be assumed to be the entire presentable image.</member>
         <member name="dstRect">pname:dstRect is a rectangular region within the visible region of the swapchain's display mode. If sname:VkDisplayPresentInfoKHR is not specified, this region will be assumed to be the entire visible region of the visible region of the swapchain's mode. If the specified rectangle is a subset of the display mode's visible region, content from display planes below the swapchain's plane will be visible outside the rectangle. If there are no planes below the swapchain's, the area outside the specified rectangle will be black. If portions of the specified rectangle are outside of the display's visible region, pixels mapping only to those portions of the rectangle will be discarded.</member>
@@ -1080,7 +1080,7 @@
         <para>.Valid Usage **** * pname:planeIndex must: be less than the number of display planes supported by the device as determined by calling fname:vkGetPhysicalDeviceDisplayPlanePropertiesKHR * If the pname:planeReorderPossible member of the sname:VkDisplayPropertiesKHR structure returned by fname:vkGetPhysicalDeviceDisplayPropertiesKHR for the display corresponding to pname:displayMode is ename:VK_TRUE then pname:planeStackIndex must: be less than the number of display planes supported by the device as determined by calling fname:vkGetPhysicalDeviceDisplayPlanePropertiesKHR; otherwise pname:planeStackIndex must: equal the pname:currentStackIndex member of sname:VkDisplayPlanePropertiesKHR returned by fname:vkGetPhysicalDeviceDisplayPlanePropertiesKHR for the display plane corresponding to pname:displayMode * If pname:alphaMode is ename:VK_DISPLAY_PLANE_ALPHA_GLOBAL_BIT_KHR then pname:globalAlpha must: be between `0` and `1`, inclusive * pname:alphaMode must: be `0` or one of the bits present in the pname:supportedAlpha member of sname:VkDisplayPlaneCapabilitiesKHR returned by fname:vkGetDisplayPlaneCapabilitiesKHR for the display plane corresponding to pname:displayMode * The pname:width and pname:height members of pname:imageExtent must: be less than the pname:maxImageDimensions2D member of sname:VkPhysicalDeviceLimits ****</para>
       </description>
       <members>
-        <member name="sType">pname:sType is the type of this structure and must: be ename:VK_STRUCTURE_TYPE_DISPLAY_SURFACE_CREATE_INFO_KHR.</member>
+        <member name="sType">pname:sType is the type of this structure.</member>
         <member name="pNext">pname:pNext is `NULL` or a pointer to an extension-specific structure.</member>
         <member name="flags">pname:flags is reserved for future use, and must: be zero.</member>
         <member name="displayMode">pname:displayMode is the mode to use when displaying this surface.</member>
@@ -1203,7 +1203,10 @@
     </type>
     <type name="VkExternalMemoryHandleTypeFlagBitsNV" summary="Bitmask specifying memory handle types.">
       <specification />
-      <description />
+      <description>
+        <para>If pname:handleType is 0, this structure is ignored by consumers of the slink:VkMemoryAllocateInfo structure it is chained from.</para>
+        <para>.Valid Usage **** * pname:handleType must: not have more than one bit set. * pname:handle must: be a valid handle to memory, obtained as specified by pname:handleType. ****</para>
+      </description>
       <members />
     </type>
     <type name="VkExternalMemoryImageCreateInfoNV" summary="Specify that an image may be backed by external memory.">
@@ -1554,7 +1557,7 @@
         <para>The mask must: be only ename:VK_IMAGE_ASPECT_COLOR_BIT, ename:VK_IMAGE_ASPECT_DEPTH_BIT or ename:VK_IMAGE_ASPECT_STENCIL_BIT if pname:format is a color, depth-only or stencil-only format, respectively. If using a depth/stencil format with both depth and stencil components, pname:aspectMask must: include at least one of ename:VK_IMAGE_ASPECT_DEPTH_BIT and ename:VK_IMAGE_ASPECT_STENCIL_BIT, and can: include both.</para>
         <para>When using an imageView of a depth/stencil image to populate a descriptor set (e.g. for sampling in the shader, or for use as an input attachment), the pname:aspectMask must: only include one bit and selects whether the imageView is used for depth reads (i.e. using a floating-point sampler or input attachment in the shader) or stencil reads (i.e. using an unsigned integer sampler or input attachment in the shader). When an imageView of a depth/stencil image is used as a depth/stencil framebuffer attachment, the pname:aspectMask is ignored and both depth and stencil image subresources are used.</para>
         <para>The pname:components member is of type slink:VkComponentMapping, and describes a remapping from components of the image to components of the vector returned by shader image instructions. This remapping must: be identity for storage image descriptors, input attachment descriptors, and framebuffer attachments.</para>
-        <para>.Valid Usage **** * If pname:levelCount is not ename:VK_REMAINING_MIP_LEVELS, [eq]#(pname:baseMipLevel + pname:levelCount)# must: be less than or equal to the pname:mipLevels specified in slink:VkImageCreateInfo when the image was created * If pname:layerCount is not ename:VK_REMAINING_ARRAY_LAYERS, [eq]#(pname:baseArrayLayer + pname:layerCount)# must: be less than or equal to the pname:arrayLayers specified in slink:VkImageCreateInfo when the image was created ****</para>
+        <para>.Valid Usage **** * If pname:levelCount is not ename:VK_REMAINING_MIP_LEVELS, [eq]#pname:levelCount# must: be non-zero and [eq]#(pname:baseMipLevel + pname:levelCount)# must: be less than or equal to the pname:mipLevels specified in slink:VkImageCreateInfo when the image was created * If pname:layerCount is not ename:VK_REMAINING_ARRAY_LAYERS, [eq]#pname:layerCount# must: be non-zero and [eq]#(pname:baseArrayLayer + pname:layerCount)# must: be less than or equal to the pname:arrayLayers specified in slink:VkImageCreateInfo when the image was created ****</para>
       </description>
       <members />
     </type>
@@ -1929,7 +1932,7 @@
       <specification />
       <description />
       <members>
-        <member name="sType">pname:sType is the type of this structure and must: be ename:VK_STRUCTURE_TYPE_MIR_SURFACE_CREATE_INFO_KHR.</member>
+        <member name="sType">pname:sType is the type of this structure.</member>
         <member name="pNext">pname:pNext is `NULL` or a pointer to an extension-specific structure.</member>
         <member name="flags">pname:flags is reserved for future use.</member>
         <member name="connection">pname:connection and pname:surface are pointers to the code:MirConnection and code:MirSurface for the window to associate the surface with.</member>
@@ -2417,10 +2420,10 @@
     <type name="VkPresentInfoKHR" summary="Structure describing parameters of a queue presentation.">
       <specification />
       <description>
-        <para>.Valid Usage **** * Any given element of pname:pImageIndices must: be the index of a presentable image acquired from the swapchain specified by the corresponding element of the pname:pSwapchains array * Any given element of sname:VkSemaphore in pname:pWaitSemaphores must: refer to a prior signal of that sname:VkSemaphore that will not be consumed by any other wait on that semaphore ****</para>
+        <para>.Valid Usage **** * Any given element of pname:pImageIndices must: be the index of a presentable image acquired from the swapchain specified by the corresponding element of the pname:pSwapchains array, and the presented image subresource must: be in the ename:VK_IMAGE_LAYOUT_PRESENT_SRC_KHR layout at the time the operation is executed on a sname:VkDevice * Any given element of sname:VkSemaphore in pname:pWaitSemaphores must: refer to a prior signal of that sname:VkSemaphore that will not be consumed by any other wait on that semaphore ****</para>
       </description>
       <members>
-        <member name="sType">pname:sType is the type of this structure and must: be ename:VK_STRUCTURE_TYPE_PRESENT_INFO_KHR.</member>
+        <member name="sType">pname:sType is the type of this structure.</member>
         <member name="pNext">pname:pNext is `NULL` or a pointer to an extension-specific structure.</member>
         <member name="waitSemaphoreCount">pname:waitSemaphoreCount is the number of semaphores to wait for before issuing the present request. The number may: be zero.</member>
         <member name="pWaitSemaphores">pname:pWaitSemaphores, if not code:VK_NULL_HANDLE, is an array of sname:VkSemaphore objects with pname:waitSemaphoreCount entries, and specifies the semaphores to wait for before issuing the present request.</member>
@@ -3009,7 +3012,7 @@
         <para>.Valid Usage **** * pname:surface must: be a surface that is supported by the device as determined using fname:vkGetPhysicalDeviceSurfaceSupportKHR * pname:minImageCount must: be greater than or equal to the value returned in the pname:minImageCount member of the sname:VkSurfaceCapabilitiesKHR structure returned by fname:vkGetPhysicalDeviceSurfaceCapabilitiesKHR for the surface * pname:minImageCount must: be less than or equal to the value returned in the pname:maxImageCount member of the sname:VkSurfaceCapabilitiesKHR structure returned by fname:vkGetPhysicalDeviceSurfaceCapabilitiesKHR for the surface if the returned pname:maxImageCount is not zero * pname:imageFormat and pname:imageColorSpace must: match the pname:format and pname:colorSpace members, respectively, of one of the sname:VkSurfaceFormatKHR structures returned by fname:vkGetPhysicalDeviceSurfaceFormatsKHR for the surface * pname:imageExtent must: be between pname:minImageExtent and pname:maxImageExtent, inclusive, where pname:minImageExtent and pname:maxImageExtent are members of the sname:VkSurfaceCapabilitiesKHR structure returned by fname:vkGetPhysicalDeviceSurfaceCapabilitiesKHR for the surface * pname:imageArrayLayers must: be greater than `0` and less than or equal to the pname:maxImageArrayLayers member of the sname:VkSurfaceCapabilitiesKHR structure returned by fname:vkGetPhysicalDeviceSurfaceCapabilitiesKHR for the surface * pname:imageUsage must: be a subset of the supported usage flags present in the pname:supportedUsageFlags member of the sname:VkSurfaceCapabilitiesKHR structure returned by fname:vkGetPhysicalDeviceSurfaceCapabilitiesKHR for the surface * If pname:imageSharingMode is ename:VK_SHARING_MODE_CONCURRENT, pname:pQueueFamilyIndices must: be a pointer to an array of pname:queueFamilyIndexCount basetype:uint32_t values * If pname:imageSharingMode is ename:VK_SHARING_MODE_CONCURRENT, pname:queueFamilyIndexCount must: be greater than `1` * pname:preTransform must: be one of the bits present in the pname:supportedTransforms member of the sname:VkSurfaceCapabilitiesKHR structure returned by fname:vkGetPhysicalDeviceSurfaceCapabilitiesKHR for the surface * pname:compositeAlpha must: be one of the bits present in the pname:supportedCompositeAlpha member of the sname:VkSurfaceCapabilitiesKHR structure returned by fname:vkGetPhysicalDeviceSurfaceCapabilitiesKHR for the surface * pname:presentMode must: be one of the ename:VkPresentModeKHR values returned by fname:vkGetPhysicalDeviceSurfacePresentModesKHR for the surface ****</para>
       </description>
       <members>
-        <member name="sType">pname:sType is the type of this structure and must: be ename:VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR.</member>
+        <member name="sType">pname:sType is the type of this structure.</member>
         <member name="pNext">pname:pNext is `NULL` or a pointer to an extension-specific structure.</member>
         <member name="flags">pname:flags is reserved for future use, and must: be zero.</member>
         <member name="surface">pname:surface is the surface that the swapchain will present images to.</member>
@@ -3108,7 +3111,7 @@
       <specification />
       <description />
       <members>
-        <member name="sType">pname:sType is the type of this structure and must: be ename:VK_STRUCTURE_TYPE_WAYLAND_SURFACE_CREATE_INFO_KHR.</member>
+        <member name="sType">pname:sType is the type of this structure.</member>
         <member name="pNext">pname:pNext is `NULL` or a pointer to an extension-specific structure.</member>
         <member name="flags">pname:flags is reserved for future use.</member>
         <member name="display">pname:display and pname:surface are pointers to the Wayland code:wl_display and code:wl_surface to associate the surface with.</member>
@@ -3128,7 +3131,7 @@
       <specification />
       <description />
       <members>
-        <member name="sType">pname:sType is the type of this structure and must: be ename:VK_STRUCTURE_TYPE_WIN32_SURFACE_CREATE_INFO_KHR.</member>
+        <member name="sType">pname:sType is the type of this structure.</member>
         <member name="pNext">pname:pNext is `NULL` or a pointer to an extension-specific structure.</member>
         <member name="flags">pname:flags is reserved for future use.</member>
         <member name="hinstance">pname:hinstance and pname:hwnd are the Win32 code:HINSTANCE and code:HWND for the window to associate the surface with.</member>
@@ -3138,8 +3141,8 @@
       <specification />
       <description>
         <para>Only one of pname:pImageInfo, pname:pBufferInfo, or pname:pTexelBufferView members is used according to the descriptor type specified in the pname:descriptorType member of the containing sname:VkWriteDescriptorSet structure, as specified below.</para>
-        <para>[[descriptorsets-updates-consecutive, consecutive binding updates]] If the pname:dstBinding has fewer than pname:descriptorCount array elements remaining starting from pname:dstArrayElement, then the remainder will be used to update the subsequent binding - pname:dstBinding+1 starting at array element zero. This behavior applies recursively, with the update affecting consecutive bindings as needed to update all pname:descriptorCount descriptors. All consecutive bindings updated via a single sname:VkWriteDescriptorSet structure must: have identical pname:descriptorType and pname:stageFlags, and must: all either use immutable samplers or must: all not use immutable samplers.</para>
-        <para>.Valid Usage **** * pname:dstBinding must: be a valid binding point within pname:dstSet * pname:descriptorType must: match the type of pname:dstBinding within pname:dstSet * The sum of pname:dstArrayElement and pname:descriptorCount must: be less than or equal to the number of array elements in the descriptor set binding specified by pname:dstBinding, and all applicable consecutive bindings, as described by &lt;&lt;descriptorsets-updates-consecutive&gt;&gt; * If pname:descriptorType is ename:VK_DESCRIPTOR_TYPE_SAMPLER, ename:VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, ename:VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE, ename:VK_DESCRIPTOR_TYPE_STORAGE_IMAGE, or ename:VK_DESCRIPTOR_TYPE_INPUT_ATTACHMENT, pname:pImageInfo must: be a pointer to an array of pname:descriptorCount valid sname:VkDescriptorImageInfo structures * If pname:descriptorType is ename:VK_DESCRIPTOR_TYPE_UNIFORM_TEXEL_BUFFER or ename:VK_DESCRIPTOR_TYPE_STORAGE_TEXEL_BUFFER, pname:pTexelBufferView must: be a pointer to an array of pname:descriptorCount valid sname:VkBufferView handles * If pname:descriptorType is ename:VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, ename:VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, ename:VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC, or ename:VK_DESCRIPTOR_TYPE_STORAGE_BUFFER_DYNAMIC, pname:pBufferInfo must: be a pointer to an array of pname:descriptorCount valid sname:VkDescriptorBufferInfo structures * If pname:descriptorType is ename:VK_DESCRIPTOR_TYPE_SAMPLER or ename:VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, and pname:dstSet was not allocated with a layout that included immutable samplers for pname:dstBinding with pname:descriptorType, the pname:sampler member of any given element of pname:pImageInfo must: be a valid sname:VkSampler object * If pname:descriptorType is ename:VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, ename:VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE, ename:VK_DESCRIPTOR_TYPE_STORAGE_IMAGE, or ename:VK_DESCRIPTOR_TYPE_INPUT_ATTACHMENT, the pname:imageView and pname:imageLayout members of any given element of pname:pImageInfo must: be a valid sname:VkImageView and elink:VkImageLayout, respectively * If pname:descriptorType is ename:VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER or ename:VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC, the pname:offset member of any given element of pname:pBufferInfo must: be a multiple of sname:VkPhysicalDeviceLimits::pname:minUniformBufferOffsetAlignment * If pname:descriptorType is ename:VK_DESCRIPTOR_TYPE_STORAGE_BUFFER or ename:VK_DESCRIPTOR_TYPE_STORAGE_BUFFER_DYNAMIC, the pname:offset member of any given element of pname:pBufferInfo must: be a multiple of sname:VkPhysicalDeviceLimits::pname:minStorageBufferOffsetAlignment * If pname:descriptorType is ename:VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER or ename:VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC, the pname:buffer member of any given element of pname:pBufferInfo must: have been created with ename:VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT set * If pname:descriptorType is ename:VK_DESCRIPTOR_TYPE_STORAGE_BUFFER or ename:VK_DESCRIPTOR_TYPE_STORAGE_BUFFER_DYNAMIC, the pname:buffer member of any given element of pname:pBufferInfo must: have been created with ename:VK_BUFFER_USAGE_STORAGE_BUFFER_BIT set * If pname:descriptorType is ename:VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER or ename:VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC, the pname:range member of any given element of pname:pBufferInfo, or the effective range if pname:range is ename:VK_WHOLE_SIZE, must: be less than or equal to sname:VkPhysicalDeviceLimits::pname:maxUniformBufferRange * If pname:descriptorType is ename:VK_DESCRIPTOR_TYPE_STORAGE_BUFFER or ename:VK_DESCRIPTOR_TYPE_STORAGE_BUFFER_DYNAMIC, the pname:range member of any given element of pname:pBufferInfo, or the effective range if pname:range is ename:VK_WHOLE_SIZE, must: be less than or equal to sname:VkPhysicalDeviceLimits::pname:maxStorageBufferRange * If pname:descriptorType is ename:VK_DESCRIPTOR_TYPE_UNIFORM_TEXEL_BUFFER, the sname:VkBuffer that any given element of pname:pTexelBufferView was created from must: have been created with ename:VK_BUFFER_USAGE_UNIFORM_TEXEL_BUFFER_BIT set * If pname:descriptorType is ename:VK_DESCRIPTOR_TYPE_STORAGE_TEXEL_BUFFER, the sname:VkBuffer that any given element of pname:pTexelBufferView was created from must: have been created with ename:VK_BUFFER_USAGE_STORAGE_TEXEL_BUFFER_BIT set * If pname:descriptorType is ename:VK_DESCRIPTOR_TYPE_STORAGE_IMAGE or ename:VK_DESCRIPTOR_TYPE_INPUT_ATTACHMENT, the pname:imageView member of any given element of pname:pImageInfo must: have been created with the identity swizzle ****</para>
+        <para>[[descriptorsets-updates-consecutive, consecutive binding updates]] If the pname:dstBinding has fewer than pname:descriptorCount array elements remaining starting from pname:dstArrayElement, then the remainder will be used to update the subsequent binding - pname:dstBinding+1 starting at array element zero. If a binding has a pname:descriptorCount of zero, it is skipped. This behavior applies recursively, with the update affecting consecutive bindings as needed to update all pname:descriptorCount descriptors. All consecutive bindings updated via a single sname:VkWriteDescriptorSet structure, except those with a pname:descriptorCount of zero, must: have identical pname:descriptorType and pname:stageFlags, and must: all either use immutable samplers or must: all not use immutable samplers.</para>
+        <para>.Valid Usage **** * pname:dstBinding must: be less than or equal to the maximum value of pname:binding of all slink:VkDescriptorSetLayoutBinding structures specified when pname:dstSet's descriptor set layout was created * pname:dstBinding must: be a binding with a non-zero pname:descriptorCount * pname:descriptorType must: match the type of pname:dstBinding within pname:dstSet * The sum of pname:dstArrayElement and pname:descriptorCount must: be less than or equal to the number of array elements in the descriptor set binding specified by pname:dstBinding, and all applicable consecutive bindings, as described by &lt;&lt;descriptorsets-updates-consecutive&gt;&gt; * If pname:descriptorType is ename:VK_DESCRIPTOR_TYPE_SAMPLER, ename:VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, ename:VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE, ename:VK_DESCRIPTOR_TYPE_STORAGE_IMAGE, or ename:VK_DESCRIPTOR_TYPE_INPUT_ATTACHMENT, pname:pImageInfo must: be a pointer to an array of pname:descriptorCount valid sname:VkDescriptorImageInfo structures * If pname:descriptorType is ename:VK_DESCRIPTOR_TYPE_UNIFORM_TEXEL_BUFFER or ename:VK_DESCRIPTOR_TYPE_STORAGE_TEXEL_BUFFER, pname:pTexelBufferView must: be a pointer to an array of pname:descriptorCount valid sname:VkBufferView handles * If pname:descriptorType is ename:VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, ename:VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, ename:VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC, or ename:VK_DESCRIPTOR_TYPE_STORAGE_BUFFER_DYNAMIC, pname:pBufferInfo must: be a pointer to an array of pname:descriptorCount valid sname:VkDescriptorBufferInfo structures * If pname:descriptorType is ename:VK_DESCRIPTOR_TYPE_SAMPLER or ename:VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, and pname:dstSet was not allocated with a layout that included immutable samplers for pname:dstBinding with pname:descriptorType, the pname:sampler member of any given element of pname:pImageInfo must: be a valid sname:VkSampler object * If pname:descriptorType is ename:VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, ename:VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE, ename:VK_DESCRIPTOR_TYPE_STORAGE_IMAGE, or ename:VK_DESCRIPTOR_TYPE_INPUT_ATTACHMENT, the pname:imageView and pname:imageLayout members of any given element of pname:pImageInfo must: be a valid sname:VkImageView and elink:VkImageLayout, respectively * If pname:descriptorType is ename:VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER or ename:VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC, the pname:offset member of any given element of pname:pBufferInfo must: be a multiple of sname:VkPhysicalDeviceLimits::pname:minUniformBufferOffsetAlignment * If pname:descriptorType is ename:VK_DESCRIPTOR_TYPE_STORAGE_BUFFER or ename:VK_DESCRIPTOR_TYPE_STORAGE_BUFFER_DYNAMIC, the pname:offset member of any given element of pname:pBufferInfo must: be a multiple of sname:VkPhysicalDeviceLimits::pname:minStorageBufferOffsetAlignment * If pname:descriptorType is ename:VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER or ename:VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC, the pname:buffer member of any given element of pname:pBufferInfo must: have been created with ename:VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT set * If pname:descriptorType is ename:VK_DESCRIPTOR_TYPE_STORAGE_BUFFER or ename:VK_DESCRIPTOR_TYPE_STORAGE_BUFFER_DYNAMIC, the pname:buffer member of any given element of pname:pBufferInfo must: have been created with ename:VK_BUFFER_USAGE_STORAGE_BUFFER_BIT set * If pname:descriptorType is ename:VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER or ename:VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC, the pname:range member of any given element of pname:pBufferInfo, or the effective range if pname:range is ename:VK_WHOLE_SIZE, must: be less than or equal to sname:VkPhysicalDeviceLimits::pname:maxUniformBufferRange * If pname:descriptorType is ename:VK_DESCRIPTOR_TYPE_STORAGE_BUFFER or ename:VK_DESCRIPTOR_TYPE_STORAGE_BUFFER_DYNAMIC, the pname:range member of any given element of pname:pBufferInfo, or the effective range if pname:range is ename:VK_WHOLE_SIZE, must: be less than or equal to sname:VkPhysicalDeviceLimits::pname:maxStorageBufferRange * If pname:descriptorType is ename:VK_DESCRIPTOR_TYPE_UNIFORM_TEXEL_BUFFER, the sname:VkBuffer that any given element of pname:pTexelBufferView was created from must: have been created with ename:VK_BUFFER_USAGE_UNIFORM_TEXEL_BUFFER_BIT set * If pname:descriptorType is ename:VK_DESCRIPTOR_TYPE_STORAGE_TEXEL_BUFFER, the sname:VkBuffer that any given element of pname:pTexelBufferView was created from must: have been created with ename:VK_BUFFER_USAGE_STORAGE_TEXEL_BUFFER_BIT set * If pname:descriptorType is ename:VK_DESCRIPTOR_TYPE_STORAGE_IMAGE or ename:VK_DESCRIPTOR_TYPE_INPUT_ATTACHMENT, the pname:imageView member of any given element of pname:pImageInfo must: have been created with the identity swizzle ****</para>
       </description>
       <members>
         <member name="sType">pname:sType is the type of this structure.</member>
@@ -3158,7 +3161,7 @@
       <specification />
       <description />
       <members>
-        <member name="sType">pname:sType is the type of this structure and must: be ename:VK_STRUCTURE_TYPE_XCB_SURFACE_CREATE_INFO_KHR.</member>
+        <member name="sType">pname:sType is the type of this structure.</member>
         <member name="pNext">pname:pNext is `NULL` or a pointer to an extension-specific structure.</member>
         <member name="flags">pname:flags is reserved for future use.</member>
         <member name="connection">pname:connection is a pointer to an code:xcb_connection_t to the X server.</member>
@@ -3169,7 +3172,7 @@
       <specification />
       <description />
       <members>
-        <member name="sType">pname:sType is the type of this structure and must: be ename:VK_STRUCTURE_TYPE_XLIB_SURFACE_CREATE_INFO_KHR.</member>
+        <member name="sType">pname:sType is the type of this structure.</member>
         <member name="pNext">pname:pNext is `NULL` or a pointer to an extension-specific structure.</member>
         <member name="flags">pname:flags is reserved for future use.</member>
         <member name="dpy">pname:dpy is a pointer to an Xlib code:Display connection to the X server.</member>
