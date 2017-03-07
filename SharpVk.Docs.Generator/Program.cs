@@ -72,14 +72,21 @@ namespace SharpVk.Docs.Generator
 
                 var lines = File.ReadAllLines(fileName);
 
+                var filteredLines = new List<string>();
+
                 for (int lineIndex = 0; lineIndex < lines.Length; lineIndex++)
                 {
                     var line = lines[lineIndex];
 
-                    line = Regex.Replace(line, @"\[\[[a-zA-Z0-9\-]*\]\]", "");
+                    if (!(line.StartsWith("ifdef::") || line.StartsWith("endif::")))
+                    {
+                        line = Regex.Replace(line, @"\[\[[a-zA-Z0-9\-]*\]\]", "");
 
-                    lines[lineIndex] = line;
+                        filteredLines.Add(line);
+                    }
                 }
+
+                lines = filteredLines.ToArray();
 
                 fileData.Add(fileName, lines);
 
@@ -161,7 +168,9 @@ namespace SharpVk.Docs.Generator
 
                     if (descriptionParagraphs.Any() && TryGetMemberList(descriptionParagraphs, out memberList, out memberParagraphCount))
                     {
-                        var memberItems = memberList.ToDictionary(item =>
+                        var memberItems = new Dictionary<string, string>();
+
+                        foreach(var item in memberList)
                         {
                             var terms = item.Split(' ');
 
@@ -173,8 +182,13 @@ namespace SharpVk.Docs.Generator
 
                             string memberName = memberNameParts.Last();
 
-                            return new string(memberName.TakeWhile(character => char.IsLetterOrDigit(character) || character == '_' || character == '.').ToArray());
-                        }, x => x);
+                            string key = new string(memberName.TakeWhile(character => char.IsLetterOrDigit(character) || character == '_' || character == '.').ToArray());
+
+                            if(!memberItems.ContainsKey(key))
+                            {
+                                memberItems.Add(key, item);
+                            }
+                        }
 
                         descriptionParagraphs = descriptionParagraphs.Skip(memberParagraphCount);
 
